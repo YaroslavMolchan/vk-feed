@@ -1,5 +1,9 @@
 /vendor
 /.idea
+composer.lock
+/database/database.sqlite
 Homestead.json
 Homestead.yaml
 .env
+
+_ide_helper.php

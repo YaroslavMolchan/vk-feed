@@ -9,7 +9,9 @@
         "laravel/lumen-framework": "5.4.*",
         "vlucas/phpdotenv": "~2.2",
         "vladkens/vk": "^0.1.9",
-        "telegram-bot/api": "^2.2"
+        "telegram-bot/api": "^2.2",
+        "barryvdh/laravel-ide-helper": "^2.3",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

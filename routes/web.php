@@ -11,9 +11,26 @@
 |
 */
 
+use App\User;
+use VK\VK;
+
 $app->get('/', function () use ($app) {
-    return $app->version();
+    $user = User::find(8);
+
+    $vk = new VK(env('VK_APP_ID'), env('VK_API_SECRET'), $user->access_token);
+
+    $vk->setApiVersion(5.64);
+
+    return $vk->api('newsfeed.get', [
+        'filters' => 'post',
+        'count' => 3,
+    ])['response']['items'];
 });
 
-$app->get('auth/login', 'AuthController@login');
-$app->get('auth/callback', 'AuthController@callback');
+$app->get('login/{telegram_id}', [
+    'as' => 'login', 'uses' => 'LoginController@login'
+]);
+
+$app->get('callback/{telegram_id}', [
+    'as' => 'callback', 'uses' => 'LoginController@callback'
+]);
