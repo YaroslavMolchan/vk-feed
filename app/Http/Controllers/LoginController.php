@@ -10,7 +10,7 @@ use VK\VKException;
 
 class LoginController extends Controller
 {
-    public function login($telegram_id)
+    public function login()
     {
         $vk = new VK(env('VK_APP_ID'), env('VK_API_SECRET'));
 

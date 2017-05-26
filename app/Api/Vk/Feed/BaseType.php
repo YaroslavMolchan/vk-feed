@@ -2,13 +2,16 @@
 
 namespace App\Api\Vk\Feed;
 
+use App\Api\Vk\Feed\Types\Point;
+
 /**
  * @author MY
  * Class BaseType
  * @link https://vk.com/dev/newsfeed.get
  * @package App\Api\Vk\Feed
  */
-class BaseType {
+class BaseType
+{
 
     /**
      * тип списка новости, соответствующий одному из значений параметра filters
@@ -66,4 +69,39 @@ class BaseType {
      * @var int
      */
     protected $marked_as_ads;
+
+    protected $attributes = [
+        'type' => true,
+        'source_id' => true,
+        'date' => true,
+        'text' => true,
+        'attachments' => [],
+        'geo' => Point::class,
+        'copy_history' => [],
+        'marked_as_ads' => true
+    ];
+
+    /**
+     * BaseType constructor.
+     * @param array $raw
+     */
+    public function __construct(array $raw)
+    {
+        foreach ($this->attributes as $name => $type) {
+            if (!array_key_exists($name, $raw)) {
+                continue;
+            }
+
+            if (is_bool($type)) {
+                $this->$name = $raw[$name];
+            } elseif (is_string($type)) {
+                $this->name = new $type($raw[$name]);
+            } elseif (is_array($type)) {
+                foreach ($raw[$name] as $item) {
+                    //todo: нужно передавать что будет в массиве и обрабатывать
+                    array_push($this->$name, $item);
+                }
+            }
+        }
+    }
 }
