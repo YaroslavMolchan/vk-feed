@@ -12,14 +12,14 @@ class LoginController extends Controller
 {
     public function login()
     {
-        $vk = new VK(env('VK_APP_ID'), env('VK_API_SECRET'));
+        $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'));
 
         return redirect()->to($vk->getAuthorizeURL('wall,friends,offline')); //, route('callback', ['telegram_id' => $telegram_id])
     }
 
     public function callback($telegram_id, $code)
     {
-        $vk = new VK(env('VK_APP_ID'), env('VK_API_SECRET'));
+        $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'));
 
         if (is_null($code)) {
             throw new LoginCallbackException('Wrong URL, try to authorize again.');
