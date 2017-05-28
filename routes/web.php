@@ -11,6 +11,7 @@
 |
 */
 
+use App\User;
 use VK\VK;
 
 $app->get('/', function () use ($app) {
@@ -148,24 +149,24 @@ $item = json_decode($data, true)['response']['items'][0];
 });
 
 $app->get('/test', function () use ($app) {
-//    $vk->setApiVersion(5.64);
-//
-//    $response = $vk->api('newsfeed.get', [
-//        'filters' => 'post',
-//        'count' => 1,
-//    ]);
-//
-//    dd($response);
-//
-//    $feeds = $response['response']['items'];
-//
-//    foreach ($feeds as $feed) {
-//        $post = new \App\Api\Vk\Feed\Types\Post($feed);
-//        $post->prepare();
-//
-//        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
-//        call_user_func_array([$bot, $post->getMethod()], $post->getParams());
-//    }
+    $user = User::find(1);
+    $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
+    $vk->setApiVersion(5.64);
+
+    $response = $vk->api('newsfeed.get', [
+        'filters' => 'post',
+        'count' => 1,
+    ]);
+
+    $feeds = $response['response']['items'];
+
+    foreach ($feeds as $feed) {
+        $post = new \App\Api\Vk\Feed\Types\Post($feed);
+        $post->prepare();
+
+        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
+        call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+    }
 });
 
 $app->get('/create', function () use ($app) {
