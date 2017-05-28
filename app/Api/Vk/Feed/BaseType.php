@@ -45,7 +45,7 @@ class BaseType implements SenderInterface
     /**
      * @var string
      */
-    protected $method;
+    protected $method = 'sendMessage';
 
     /**
      * @var array

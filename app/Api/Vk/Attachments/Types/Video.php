@@ -25,21 +25,12 @@ class Video extends BaseType {
         ]
     ];
 
-    /**
-     * @return string
-     */
-    public function getMethod()
+    public function __construct(array $raw)
     {
-        return 'sendMessage';
-    }
+        parent::__construct($raw);
 
-    /**
-     * @return array
-     */
-    public function getParams()
-    {
-        return [
-            'text' => 'https://vk.com/video' . $this->owner_id . '_' . $this->id,
-        ];
+        $this->setParams([
+            'text' => 'https://vk.com/video' . $this->owner_id . '_' . $this->id
+        ]);
     }
 }
