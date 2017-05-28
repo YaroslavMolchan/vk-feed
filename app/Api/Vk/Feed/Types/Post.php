@@ -92,18 +92,18 @@ class Post extends BaseType {
                         $key = 'text';
                     }
                     if (isset($key)) {
-                        $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam($key);
+                        $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam($key);
                         $attachment->addParam($key, $text);
                     }
                 }
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
             elseif (get_class($attachment) == Video::class) {
-                $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
+                $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
                 $this->addParam('text', $text);
             }
             elseif (get_class($attachment) == Doc::class) {
-                $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
+                $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
                 $this->addParam('text', $text);
             }
             else {
@@ -126,6 +126,7 @@ class Post extends BaseType {
         else {
             $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
         }
+        $this->addParam('parseMode', 'HTML');
 
         return true;
     }
