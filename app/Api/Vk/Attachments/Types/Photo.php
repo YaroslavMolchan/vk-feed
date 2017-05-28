@@ -27,13 +27,34 @@ class Photo extends BaseType {
         ]
     ];
 
-    public function process(array $data)
+    /**
+     * @author MY
+     * Photo constructor.
+     * @param array $raw
+     */
+    public function __construct(array $raw)
     {
-        $this->setSendMethod('photo');
-        $this->setSendParams([
-            'url' => $this->photo_604
+        parent::__construct($raw);
+
+        $this->setParams([
+            'photo' => $this->photo_604,
+            'caption' => $this->text
         ]);
-        echo __CLASS__ . PHP_EOL;
-        return $this->sendData();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return 'sendPhoto';
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }

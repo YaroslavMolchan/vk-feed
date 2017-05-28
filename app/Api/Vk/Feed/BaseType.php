@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Api\Vk\Feed;
-use App\Helpers\ChainPattern\Handler;
+use App\Contracts\Vk\SenderInterface;
 
 /**
  * @author MY
@@ -9,7 +9,7 @@ use App\Helpers\ChainPattern\Handler;
  * @link https://vk.com/dev/newsfeed.get
  * @package App\Api\Vk\Feed
  */
-class BaseType extends Handler
+class BaseType implements SenderInterface
 {
 
     /**
@@ -27,6 +27,13 @@ class BaseType extends Handler
     protected $source_id;
 
     /**
+     * находится в записях со стен и содержит идентификатор записи на стене владельца
+     * @author MY
+     * @var int
+     */
+    protected $post_id;
+
+    /**
      * время публикации новости в формате unixtime
      * @author MY
      * @var int
@@ -36,16 +43,14 @@ class BaseType extends Handler
     protected $attributes;
 
     /**
-     * @author MY
      * @var string
      */
-    protected $sendMethod;
+    protected $method;
 
     /**
-     * @author MY
      * @var array
      */
-    protected $sendParams;
+    protected $params = [];
 
     /**
      * BaseType constructor.
@@ -78,60 +83,53 @@ class BaseType extends Handler
     }
 
     /**
-     * @author MY
      * @return string
      */
-    public function getSendMethod()
+    public function getMethod()
     {
-        return $this->sendMethod;
+        return $this->method;
     }
 
     /**
-     * @author MY
-     * @param string $sendMethod
+     * @param string $method
      */
-    public function setSendMethod($sendMethod)
+    public function setMethod(string $method)
     {
-        $this->sendMethod = $sendMethod;
+        $this->method = $method;
     }
 
     /**
-     * @author MY
      * @return array
      */
-    public function getSendParams()
+    public function getParams()
     {
-        return $this->sendParams;
+        return $this->params;
     }
 
     /**
-     * @author MY
-     * @param array $sendParams
+     * @param array $params
      */
-    public function setSendParams($sendParams)
+    public function setParams(array $params)
     {
-        $this->sendParams = $sendParams;
+        $this->params = $params;
     }
 
-    public function sendData()
+    public function addParam($key, $value)
     {
-        return [
-            'method' => $this->sendMethod,
-            'params' => $this->sendParams
-        ];
+        $this->params[$key] = $value;
     }
 
-    /**
-     * Processes the request.
-     * This is the only method a child can implements,
-     * with the constraint to return null to dispatch the request to next successor.
-     *
-     * @param array $data
-     *
-     * @return null|mixed
-     */
-    protected function process(array $data)
+    public function hasParam($key)
     {
-        dd($this->sendData());
+        return array_key_exists($key, $this->params);
+    }
+
+    public function getParam($key)
+    {
+        if (!$this->hasParam($key)) {
+            return null;
+        }
+
+        return $this->params[$key];
     }
 }

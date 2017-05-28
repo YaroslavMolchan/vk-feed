@@ -2,23 +2,21 @@
 
 namespace App\Api\Vk\Attachments\Types;
 
-use App\Helpers\ChainPattern\Handler;
+use App\Contracts\Vk\SenderInterface;
 
-class BaseType extends Handler {
+class BaseType implements SenderInterface {
 
     protected $attributes;
 
     /**
-     * @author MY
      * @var string
      */
-    protected $sendMethod;
+    protected $method;
 
     /**
-     * @author MY
      * @var array
      */
-    protected $sendParams;
+    protected $params = [];
 
     /**
      * BaseType constructor.
@@ -59,61 +57,54 @@ class BaseType extends Handler {
         }
     }
 
-    public function sendData()
-    {
-        return [
-            'method' => $this->sendMethod,
-            'params' => $this->sendParams
-        ];
-    }
-
     /**
-     * @author MY
      * @return string
      */
-    public function getSendMethod()
+    public function getMethod()
     {
-        return $this->sendMethod;
+        return $this->method;
     }
 
     /**
-     * @author MY
-     * @param string $sendMethod
+     * @param string $method
      */
-    public function setSendMethod($sendMethod)
+    public function setMethod(string $method)
     {
-        $this->sendMethod = $sendMethod;
+        $this->method = $method;
     }
 
     /**
-     * @author MY
      * @return array
      */
-    public function getSendParams()
+    public function getParams()
     {
-        return $this->sendParams;
+        return $this->params;
     }
 
     /**
-     * @author MY
-     * @param array $sendParams
+     * @param array $params
      */
-    public function setSendParams($sendParams)
+    public function setParams(array $params)
     {
-        $this->sendParams = $sendParams;
+        $this->params = $params;
     }
 
-    /**
-     * Processes the request.
-     * This is the only method a child can implements,
-     * with the constraint to return null to dispatch the request to next successor.
-     *
-     * @param array $data
-     *
-     * @return null|mixed
-     */
-    protected function process(array $data)
+    public function addParam($key, $value)
     {
-        // (MY)TODO: Implement process() method.
+        $this->params[$key] = $value;
+    }
+
+    public function hasParam($key)
+    {
+        return array_key_exists($key, $this->params);
+    }
+
+    public function getParam($key)
+    {
+        if (!$this->hasParam($key)) {
+            return null;
+        }
+
+        return $this->params[$key];
     }
 }

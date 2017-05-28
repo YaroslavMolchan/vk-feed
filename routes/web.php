@@ -11,25 +11,7 @@
 |
 */
 
-use App\Test\FirstHandler;
-use App\Test\SecondHandler;
-use App\Test\ThirdHandler;
-use App\User;
 use VK\VK;
-
-$app->get('/test', function () use ($app) {
-    $firstHandler = new FirstHandler();
-    $secondHandler = new SecondHandler();
-    $thirdHandler = new ThirdHandler();
-
-//the code below sets all successors through the first handler
-    $firstHandler->setSuccessor($secondHandler);
-    $firstHandler->setSuccessor($thirdHandler);
-
-    $request = 123;
-    $result = $firstHandler->handle($request);
-    dd($result);
-});
 
 $app->get('/', function () use ($app) {
 
@@ -37,41 +19,39 @@ $app->get('/', function () use ($app) {
 "response": {
 "items": [{
 "type": "post",
-"source_id": 19555481,
-"date": 1495447797,
-"post_id": 3497,
+"source_id": -79268570,
+"date": 1495995912,
+"post_id": 390489,
 "post_type": "post",
-"text": "",
+"text": "&#127481;&#127479;",
+"marked_as_ads": 0,
 "attachments": [{
-"type": "link",
-"link": {
-"url": "http://about.coinkeeper.me/maycontest",
-"title": "Подготовьтесь к отпуску!",
-"caption": "about.coinkeeper.me",
-"description": "Учитывайте финансы в CoinKeeper и выигрывайте призы",
+"type": "photo",
 "photo": {
-"id": 456239456,
-"album_id": -2,
-"owner_id": 1321639,
-"photo_75": "https://cs7051.us...213/rix46AiPqcI.jpg",
-"photo_130": "https://cs7051.us...214/q1eaoDgWRs4.jpg",
-"photo_604": "https://cs7051.us...215/Pl1KW-R9D_I.jpg",
-"width": 150,
-"height": 84,
+"id": 456257975,
+"album_id": -7,
+"owner_id": -79268570,
+"user_id": 100,
+"photo_75": "https://cs540102....48a/Z5RkXg8aGno.jpg",
+"photo_130": "https://cs540102....48b/2vafpoR8w_8.jpg",
+"photo_604": "https://cs540102.userapi.com/c836634/v836634931/3098b/PT7D-mWqv_Y.jpg",
+"width": 416,
+"height": 226,
 "text": "",
-"date": 1495200930
-}
+"date": 1495995912,
+"post_id": 390489,
+"access_key": "291e022b341063480c"
 }
 }],
 "post_source": {
 "type": "vk"
 },
 "comments": {
-"count": 0,
+"count": 1,
 "can_post": 1
 },
 "likes": {
-"count": 0,
+"count": 14,
 "user_likes": 0,
 "can_like": 1,
 "can_publish": 1
@@ -81,33 +61,75 @@ $app->get('/', function () use ($app) {
 "user_reposted": 0
 },
 "views": {
-"count": 23
+"count": 719
 }
 }],
-"profiles": [{
-"id": 19555481,
-"first_name": "Ярик",
-"last_name": "Молчан",
-"sex": 2,
-"screen_name": "jadson",
-"photo_50": "https://pp.userap...f7e/Z08ZVZE01HU.jpg",
-"photo_100": "https://pp.userap...f7d/7ZUtedeR63Q.jpg",
-"online": 0
+"profiles": [],
+"groups": [{
+"id": 79268570,
+"name": "CS:GO HS | Новости Киберспорта",
+"screen_name": "csgohs",
+"is_closed": 0,
+"type": "page",
+"is_admin": 0,
+"is_member": 1,
+"photo_50": "https://pp.userap...691/jrcXKlP4oTw.jpg",
+"photo_100": "https://pp.userap...690/5iyFDxQxoAY.jpg",
+"photo_200": "https://pp.userap...68f/GfzavOWCcWA.jpg"
+}, {
+"id": 57876954,
+"name": "Vine Video",
+"screen_name": "vinevinevine",
+"is_closed": 0,
+"type": "page",
+"is_admin": 0,
+"is_member": 1,
+"photo_50": "https://pp.userap...57f/xJYWkaRxISI.jpg",
+"photo_100": "https://pp.userap...57e/wdH30q7f1sw.jpg",
+"photo_200": "https://pp.userap...57d/cVv_Gg7sWQQ.jpg"
+}, {
+"id": 29058375,
+"name": "Zeus Cyber School [CS:GO]",
+"screen_name": "zeuscyberschool",
+"is_closed": 0,
+"type": "page",
+"is_admin": 0,
+"is_member": 1,
+"photo_50": "https://pp.userap...385/sjzhcRYWzpM.jpg",
+"photo_100": "https://pp.userap...384/cWTYfCvkb7Q.jpg",
+"photo_200": "https://pp.userap...383/UwDMbWj3Ouc.jpg"
+}, {
+"id": 54026773,
+"name": "petr1k",
+"screen_name": "petr1k_tv",
+"is_closed": 0,
+"type": "page",
+"is_admin": 0,
+"is_member": 0,
+"photo_50": "https://pp.userap...f9c/geNs_tK8RGE.jpg",
+"photo_100": "https://pp.userap...f9b/I4wXCDDDYd0.jpg",
+"photo_200": "https://pp.userap...f9a/1GvUk8kDXpQ.jpg"
+}, {
+"id": 117306625,
+"name": "kENZOR | Official Page",
+"screen_name": "kenzorgod",
+"is_closed": 0,
+"type": "page",
+"is_admin": 0,
+"is_member": 0,
+"photo_50": "https://pp.userap...35c/4jyBTpNQ0Oc.jpg",
+"photo_100": "https://pp.userap...35b/ZncxBhvEvDc.jpg",
+"photo_200": "https://pp.userap...35a/IupyQvrSwe8.jpg"
 }],
-"groups": [],
-"next_from": "6/3497_1495400400_5"
+"next_from": "1/390489_1495918800_5"
 }
 }';
 $item = json_decode($data, true)['response']['items'][0];
     $post = new \App\Api\Vk\Feed\Types\Post($item);
-//dd($post);
-$link = $post->getAttachments()[0];
-    $post->setSuccessor($link);
-    $photo = $link->getPhoto();
-    $post->setSuccessor($photo);
+    $post->prepare();
 
-    $result = $post->handle([]);
-dd($result);
+    $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
+    call_user_func_array([$bot, $post->getMethod()], $post->getParams());
 //    $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));env('TELEGRAM_CHAT_ID');
 //    $options = [];
 //    return call_user_func_array([$bot, $attachment->getMethod()], $options);
@@ -125,6 +147,24 @@ dd($result);
 //    ])['response']['items'];
 });
 
+$app->get('/test', function () use ($app) {
+    $vk = new VK(env('VK_APP_ID'), env('VK_API_SECRET'), env('VK_ACCESS_TOKEN'));
+
+    $vk->setApiVersion(5.64);
+
+    $feeds = $vk->api('newsfeed.get', [
+        'filters' => 'post',
+        'count' => 1,
+    ])['response']['items'];
+
+    foreach ($feeds as $feed) {
+        $post = new \App\Api\Vk\Feed\Types\Post($feed);
+        $post->prepare();
+
+        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
+        call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+    }
+});
 
 $app->get('/create', function () use ($app) {
     App\User::create([

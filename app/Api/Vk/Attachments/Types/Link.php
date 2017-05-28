@@ -68,20 +68,33 @@ class Link extends BaseType {
     }
 
     /**
-     * @author MY
-     * @param Photo $photo
+     * @return string
      */
-    public function setPhoto($photo)
+    public function getMethod()
     {
-        $this->photo = $photo;
+        if (!is_null($this->photo)) {
+            return $this->photo->getMethod();
+        }
+
+        return 'sendMessage';
     }
 
-    public function process(array $data)
+    /**
+     * @return array
+     */
+    public function getParams()
     {
-        $this->setSendParams([
-            'description' => $this->description
-        ]);
-        echo __CLASS__ . PHP_EOL;
-//        var_dump($this->sendData());
+        $text = $this->title . PHP_EOL . $this->description . '. Link: ' . $this->url;
+
+        if (!is_null($this->photo)) {
+            return [
+                'photo' => $this->photo->getParams()['photo'],
+                'caption' => $text
+            ];
+        }
+
+        return [
+            'text' => $text
+        ];
     }
 }
