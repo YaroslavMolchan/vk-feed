@@ -3,6 +3,7 @@
 namespace App\Api\Vk\Feed\Types;
 
 use App\Api\Vk\Attachments\Resolver;
+use App\Api\Vk\Attachments\Types\Doc;
 use App\Api\Vk\Attachments\Types\Link;
 use App\Api\Vk\Attachments\Types\Photo;
 use App\Api\Vk\Attachments\Types\Video;
@@ -93,9 +94,21 @@ class Post extends BaseType {
                 }
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
-            else {
-                $this->addParam('text', $this->text);
+            elseif (get_class($attachment) == Video::class) {
+                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
+                $text = $this->text . PHP_EOL . $attachment->getParam('text') . PHP_EOL . $link;
+                $this->addParam('text', $text);
             }
+            elseif (get_class($attachment) == Doc::class) {
+                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
+                $text = $this->text . PHP_EOL . $attachment->getParam('text') . PHP_EOL . $link;
+                $this->addParam('text', $text);
+            }
+            else {
+                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
+                $this->addParam('text', $this->text . PHP_EOL . $link);
+            }
+
 //            if (get_class($attachment) == Link::class) {
 //                $method = $attachment->senderMethod();
 //                $params = $attachment->senderParams();
@@ -108,14 +121,10 @@ class Post extends BaseType {
 //                    }
 //                }
 //            }
-//            if (get_class($attachment) == Video::class) {
-//                $params = $attachment->senderParams();
-//                if (!empty($this->senderParams()['text'])) {
-//                    if (isset($params['text'])) {
-//                        $params['text'] = $this->senderParams()['text'] . PHP_EOL . $attachment->senderParams()['text'];
-//                    }
-//                }
-//            }
+        }
+        else {
+            $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
+            $this->addParam('text', $this->text . PHP_EOL . $link);
         }
 
         return true;
