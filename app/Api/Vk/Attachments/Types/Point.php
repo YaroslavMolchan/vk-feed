@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Vk\Feed\Types;
+namespace App\Api\Vk\Attachments\Types;
 
 class Point {
 

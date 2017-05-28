@@ -1,37 +1,10 @@
 <?php
 
-namespace App\Api\Vk\Feed;
+namespace App\Api\Vk\Attachments\Types;
+
 use App\Helpers\ChainPattern\Handler;
 
-/**
- * @author MY
- * Class BaseType
- * @link https://vk.com/dev/newsfeed.get
- * @package App\Api\Vk\Feed
- */
-class BaseType extends Handler
-{
-
-    /**
-     * тип списка новости, соответствующий одному из значений параметра filters
-     * @author MY
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * идентификатор источника новости (положительный — новость пользователя, отрицательный — новость группы)
-     * @author MY
-     * @var int
-     */
-    protected $source_id;
-
-    /**
-     * время публикации новости в формате unixtime
-     * @author MY
-     * @var int
-     */
-    protected $date;
+class BaseType extends Handler {
 
     protected $attributes;
 
@@ -62,6 +35,15 @@ class BaseType extends Handler
                 $this->$name = $raw[$name];
                 settype($this->$name, $params['type']);
             }
+            elseif ($params['type'] == 'object') {
+                if (!isset($params['method'])) {
+                    $class = new $params['object']($raw[$name]);
+                }
+                else {
+                    $class = call_user_func($params['object'] . '::' . $params['method'], $raw[$name]);
+                }
+                $this->$name = $class;
+            }
             elseif ($params['type'] == 'array') {
                 settype($this->$name, $params['type']);
                 foreach ($raw[$name] as $item) {
@@ -75,6 +57,14 @@ class BaseType extends Handler
                 }
             }
         }
+    }
+
+    public function sendData()
+    {
+        return [
+            'method' => $this->sendMethod,
+            'params' => $this->sendParams
+        ];
     }
 
     /**
@@ -113,14 +103,6 @@ class BaseType extends Handler
         $this->sendParams = $sendParams;
     }
 
-    public function sendData()
-    {
-        return [
-            'method' => $this->sendMethod,
-            'params' => $this->sendParams
-        ];
-    }
-
     /**
      * Processes the request.
      * This is the only method a child can implements,
@@ -132,6 +114,6 @@ class BaseType extends Handler
      */
     protected function process(array $data)
     {
-        dd($this->sendData());
+        // (MY)TODO: Implement process() method.
     }
 }
