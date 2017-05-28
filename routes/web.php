@@ -152,10 +152,14 @@ $app->get('/test', function () use ($app) {
 
     $vk->setApiVersion(5.64);
 
-    $feeds = $vk->api('newsfeed.get', [
+    $response = $vk->api('newsfeed.get', [
         'filters' => 'post',
         'count' => 1,
-    ])['response']['items'];
+    ]);
+
+    dd($response);
+
+    $feeds = $response['response']['items'];
 
     foreach ($feeds as $feed) {
         $post = new \App\Api\Vk\Feed\Types\Post($feed);
