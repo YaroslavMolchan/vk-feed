@@ -71,7 +71,12 @@ class Post extends BaseType {
         ],
     ];
 
-    public function prepare()
+    /**
+     * @author MY
+     * @param array $group
+     * @return bool
+     */
+    public function prepare(array $group)
     {
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
 
@@ -87,26 +92,22 @@ class Post extends BaseType {
                         $key = 'text';
                     }
                     if (isset($key)) {
-                        $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
-                        $text = $this->text . PHP_EOL . $attachment->getParam($key) . PHP_EOL . $link;
+                        $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam($key);
                         $attachment->addParam($key, $text);
                     }
                 }
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
             elseif (get_class($attachment) == Video::class) {
-                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
-                $text = $this->text . PHP_EOL . $attachment->getParam('text') . PHP_EOL . $link;
+                $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
                 $this->addParam('text', $text);
             }
             elseif (get_class($attachment) == Doc::class) {
-                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
-                $text = $this->text . PHP_EOL . $attachment->getParam('text') . PHP_EOL . $link;
+                $text = $group['name'] . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
                 $this->addParam('text', $text);
             }
             else {
-                $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
-                $this->addParam('text', $this->text . PHP_EOL . $link);
+                $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
             }
 
 //            if (get_class($attachment) == Link::class) {
@@ -123,8 +124,7 @@ class Post extends BaseType {
 //            }
         }
         else {
-            $link = '🔗 https://vk.com/wall' . $this->source_id . '_' . $this->post_id;
-            $this->addParam('text', $this->text . PHP_EOL . $link);
+            $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
         }
 
         return true;

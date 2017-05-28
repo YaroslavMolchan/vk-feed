@@ -160,9 +160,11 @@ $app->get('/test', function () use ($app) {
 
     $feeds = $response['response']['items'];
 
-    foreach ($feeds as $feed) {
+    $groups = $response['response']['groups'];
+
+    foreach ($feeds as $key => $feed) {
         $post = new \App\Api\Vk\Feed\Types\Post($feed);
-        $post->prepare();
+        $post->prepare($groups[$key]);
 
         $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
         call_user_func_array([$bot, $post->getMethod()], $post->getParams());
