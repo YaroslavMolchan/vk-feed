@@ -182,6 +182,6 @@ $app->get('login', [
     'as' => 'login', 'uses' => 'LoginController@login'
 ]);
 
-$app->get('callback/{telegram_id}', [
+$app->get('callback/{telegram_id}/{code}', [
     'as' => 'callback', 'uses' => 'LoginController@callback'
 ]);
