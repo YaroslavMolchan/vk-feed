@@ -181,7 +181,8 @@ $app->get('/test', function () use ($app) {
 
     foreach ($feeds as $key => $feed) {
         $post = new \App\Api\Vk\Feed\Types\Post($feed);
-        $result = $post->prepare($groups[$key]);
+        $group = isset($groups[$key]) ? $groups[$key] : ['name' => 'Неизвестно'];
+        $result = $post->prepare($group);
 
         if ($result['is_send'] == true) {
             $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
