@@ -29,6 +29,6 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'telegram_id', 'vk_id', 'access_token'
+        'telegram_id', 'vk_id', 'access_token', 'last_date'
     ];
 }

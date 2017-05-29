@@ -171,7 +171,7 @@ $app->get('/test', function () use ($app) {
 
     $response = $vk->api('newsfeed.get', [
         'filters' => 'post',
-        'count' => 100,
+        'count' => 1,
     ]);
 
     $feeds = $response['response']['items'];
