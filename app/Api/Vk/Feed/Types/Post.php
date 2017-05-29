@@ -41,6 +41,13 @@ class Post extends BaseType {
     protected $attachments;
 
     /**
+     * время публикации новости в формате unixtime
+     * @author MY
+     * @var int
+     */
+    protected $date;
+
+    /**
      * массив, содержащий историю репостов для записи.
      * @author MY
      * @var BaseType[]
@@ -64,6 +71,9 @@ class Post extends BaseType {
         'post_id' => [
             'type' => 'int',
         ],
+        'date' => [
+            'type' => 'int',
+        ],
         'attachments' => [
             'type' => 'array',
             'object' => Resolver::class,
@@ -76,7 +86,7 @@ class Post extends BaseType {
     /**
      * @author MY
      * @param array $group
-     * @return bool
+     * @return array
      */
     public function prepare(array $group)
     {
@@ -112,9 +122,12 @@ class Post extends BaseType {
                             true
                         ]);
                     }
-                    return false;
+                    return [
+                        'is_send' => false,
+                        'date' => ++$this->date
+                    ];
                 }
-                $attachment->addParam('caption', $text);
+                $attachment->addParam('caption', $group['name']);
                 $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
@@ -123,8 +136,14 @@ class Post extends BaseType {
                 $this->addParam('text', $text);
             }
             elseif (get_class($attachment) == Doc::class) {
-                $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
-                $this->addParam('text', $text);
+                $this->setMethod($attachment->getMethod());
+                $attachment->addParam('caption', $group['name'] . ': ' . $this->text);
+                $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
+
+                return [
+                    'is_send' => true,
+                    'date' => ++$this->date
+                ];
             }
             else {
                 $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
@@ -150,7 +169,10 @@ class Post extends BaseType {
             $this->addParam('disable_preview', true);
         }
 
-        return true;
+        return [
+            'is_send' => true,
+            'date' => ++$this->date
+        ];
     }
 
     /**

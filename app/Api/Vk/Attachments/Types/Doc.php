@@ -39,7 +39,16 @@ class Doc extends BaseType {
         parent::__construct($raw);
 
         $this->setParams([
-            'text' => $this->title . PHP_EOL . $this->url
+            'url' => $raw['preview']['video']['src'],
+            'caption' => $this->title
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return 'sendDocument';
     }
 }

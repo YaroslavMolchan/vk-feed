@@ -20,39 +20,69 @@ $app->get('/', function () use ($app) {
 "response": {
 "items": [{
 "type": "post",
-"source_id": -79268570,
-"date": 1495995912,
-"post_id": 390489,
+"source_id": -85687693,
+"date": 1496086432,
+"post_id": 16,
 "post_type": "post",
-"text": "&#127481;&#127479;",
+"text": "ahaha",
+"can_edit": 1,
+"created_by": 19555481,
+"can_delete": 1,
 "marked_as_ads": 0,
 "attachments": [{
-"type": "photo",
+"type": "doc",
+"doc": {
+"id": 444759448,
+"owner_id": 19555481,
+"title": "https://vk.com/vinevinevine",
+"size": 5410805,
+"ext": "gif",
+"url": "https://vk.com/doc19555481_444759448?hash=b39aea24d28ae81a21&dl=GE4TKNJVGQ4DC:1496086436:a664aaed3e14953725&api=1&module=feed&no_preview=1",
+"date": 1493189006,
+"type": 3,
+"preview": {
 "photo": {
-"id": 456257975,
-"album_id": -7,
-"owner_id": -79268570,
-"user_id": 100,
-"photo_75": "https://cs540102....48a/Z5RkXg8aGno.jpg",
-"photo_130": "https://cs540102....48b/2vafpoR8w_8.jpg",
-"photo_604": "https://cs540102.userapi.com/c836634/v836634931/3098b/PT7D-mWqv_Y.jpg",
-"width": 416,
-"height": 226,
-"text": "",
-"date": 1495995912,
-"post_id": 390489,
-"access_key": "291e022b341063480c"
+"sizes": [{
+"src": "https://cs540102....-3/m_9aacb14ae2.jpg",
+"width": 130,
+"height": 73,
+"type": "m"
+}, {
+"src": "https://cs540102....-3/s_9aacb14ae2.jpg",
+"width": 100,
+"height": 57,
+"type": "s"
+}, {
+"src": "https://cs540102....-3/x_9aacb14ae2.jpg",
+"width": 604,
+"height": 339,
+"type": "x"
+}, {
+"src": "https://cs540102....-3/o_9aacb14ae2.jpg",
+"width": 460,
+"height": 258,
+"type": "o"
+}]
+},
+"video": {
+"src": "https://vk.com/doc19555481_444759448?hash=b39aea24d28ae81a21&dl=GE4TKNJVGQ4DC:1496086436:a664aaed3e14953725&api=1&mp4=1&module=feed",
+"width": 460,
+"height": 258,
+"file_size": 406849
+}
+},
+"access_key": "b21118f96c1d37b57d"
 }
 }],
 "post_source": {
 "type": "vk"
 },
 "comments": {
-"count": 1,
+"count": 0,
 "can_post": 1
 },
 "likes": {
-"count": 14,
+"count": 0,
 "user_likes": 0,
 "can_like": 1,
 "can_publish": 1
@@ -60,23 +90,30 @@ $app->get('/', function () use ($app) {
 "reposts": {
 "count": 0,
 "user_reposted": 0
-},
-"views": {
-"count": 719
 }
 }],
-"profiles": [],
+"profiles": [{
+"id": 19555481,
+"first_name": "Ярик",
+"last_name": "Молчан",
+"sex": 2,
+"screen_name": "jadson",
+"photo_50": "https://pp.userap...f7e/Z08ZVZE01HU.jpg",
+"photo_100": "https://pp.userap...f7d/7ZUtedeR63Q.jpg",
+"online": 1
+}],
 "groups": [{
-"id": 79268570,
-"name": "CS:GO HS | Новости Киберспорта",
-"screen_name": "csgohs",
+"id": 85687693,
+"name": "WAP Обзор",
+"screen_name": "wapobzor",
 "is_closed": 0,
 "type": "page",
-"is_admin": 0,
+"is_admin": 1,
+"admin_level": 3,
 "is_member": 1,
-"photo_50": "https://pp.userap...691/jrcXKlP4oTw.jpg",
-"photo_100": "https://pp.userap...690/5iyFDxQxoAY.jpg",
-"photo_200": "https://pp.userap...68f/GfzavOWCcWA.jpg"
+"photo_50": "https://pp.userap...47c/ULfjW6qlw5A.jpg",
+"photo_100": "https://pp.userap...47b/M2bfU4cgMBQ.jpg",
+"photo_200": "https://pp.userap...47a/P5rQ1l49QRQ.jpg"
 }, {
 "id": 57876954,
 "name": "Vine Video",
@@ -99,38 +136,17 @@ $app->get('/', function () use ($app) {
 "photo_50": "https://pp.userap...385/sjzhcRYWzpM.jpg",
 "photo_100": "https://pp.userap...384/cWTYfCvkb7Q.jpg",
 "photo_200": "https://pp.userap...383/UwDMbWj3Ouc.jpg"
-}, {
-"id": 54026773,
-"name": "petr1k",
-"screen_name": "petr1k_tv",
-"is_closed": 0,
-"type": "page",
-"is_admin": 0,
-"is_member": 0,
-"photo_50": "https://pp.userap...f9c/geNs_tK8RGE.jpg",
-"photo_100": "https://pp.userap...f9b/I4wXCDDDYd0.jpg",
-"photo_200": "https://pp.userap...f9a/1GvUk8kDXpQ.jpg"
-}, {
-"id": 117306625,
-"name": "kENZOR | Official Page",
-"screen_name": "kenzorgod",
-"is_closed": 0,
-"type": "page",
-"is_admin": 0,
-"is_member": 0,
-"photo_50": "https://pp.userap...35c/4jyBTpNQ0Oc.jpg",
-"photo_100": "https://pp.userap...35b/ZncxBhvEvDc.jpg",
-"photo_200": "https://pp.userap...35a/IupyQvrSwe8.jpg"
 }],
-"next_from": "1/390489_1495918800_5"
+"next_from": "1/16_1496005200_5"
 }
 }';
 $item = json_decode($data, true)['response']['items'][0];
     $post = new \App\Api\Vk\Feed\Types\Post($item);
-    $post->prepare();
+    $post->prepare(json_decode($data, true)['response']['groups'][0]);
 
     $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
-    call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+//    dd($post->getMethod(), $post->getParams());
+//    call_user_func_array([$bot, $post->getMethod()], $post->getParams());
 //    $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));env('TELEGRAM_CHAT_ID');
 //    $options = [];
 //    return call_user_func_array([$bot, $attachment->getMethod()], $options);
@@ -149,13 +165,13 @@ $item = json_decode($data, true)['response']['items'][0];
 });
 
 $app->get('/test', function () use ($app) {
-    $user = User::find(1);
+    $user = User::where('telegram_id', 67852056)->first();
     $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
     $vk->setApiVersion(5.64);
 
     $response = $vk->api('newsfeed.get', [
         'filters' => 'post',
-        'count' => 1,
+        'count' => 100,
     ]);
 
     $feeds = $response['response']['items'];
@@ -166,11 +182,19 @@ $app->get('/test', function () use ($app) {
         $post = new \App\Api\Vk\Feed\Types\Post($feed);
         $result = $post->prepare($groups[$key]);
 
-        if ($result == true) {
+        if ($result['is_send'] == true) {
             $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
             call_user_func_array([$bot, $post->getMethod()], $post->getParams());
         }
     }
+
+    if (!empty($feeds)) {
+        $user->update([
+            'last_date' => $result['date']
+        ]);
+    }
+
+    echo count($feeds) . ' send';
 });
 
 $app->get('/create', function () use ($app) {

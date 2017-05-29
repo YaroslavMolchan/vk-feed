@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('telegram_id');
             $table->bigInteger('vk_id');
             $table->string('access_token');
+            $table->timestamp('last_date')->nullable();
             $table->timestamps();
         });
     }
