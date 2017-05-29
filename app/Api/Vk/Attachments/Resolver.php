@@ -21,10 +21,11 @@ class Resolver {
         }
 
         $className = 'App\Api\Vk\Attachments\Types\\' . ucfirst($raw['type']);
-        try {
+        
+        if (is_object($className)) {
             return new $className($raw[$raw['type']]);
         }
-        catch (\Exception $e) {
+        else {
             return new Dummy($raw[$raw['type']]);
         }
     }
