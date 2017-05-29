@@ -3,6 +3,7 @@
 namespace App\Api\Vk\Attachments;
 
 use App\Api\Vk\Attachments\Types\BaseType;
+use App\Api\Vk\Attachments\Types\Dummy;
 
 class Resolver {
 
@@ -20,6 +21,11 @@ class Resolver {
         }
 
         $className = 'App\Api\Vk\Attachments\Types\\' . ucfirst($raw['type']);
-        return new $className($raw[$raw['type']]);
+        try {
+            return new $className($raw[$raw['type']]);
+        }
+        catch (\Exception $e) {
+            return new Dummy($raw[$raw['type']]);
+        }
     }
 }

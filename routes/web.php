@@ -171,7 +171,7 @@ $app->get('/test', function () use ($app) {
 
     $response = $vk->api('newsfeed.get', [
         'filters' => 'post',
-        'count' => 10,
+        'count' => 100,
         'start_time' => $user->last_date
     ]);
 

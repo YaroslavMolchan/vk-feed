@@ -11,7 +11,8 @@
         "vladkens/vk": "^0.1.9",
         "telegram-bot/api": "^2.2",
         "barryvdh/laravel-ide-helper": "^2.3",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "bugsnag/bugsnag-laravel": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
