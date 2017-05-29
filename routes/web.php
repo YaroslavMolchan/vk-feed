@@ -164,10 +164,12 @@ $app->get('/test', function () use ($app) {
 
     foreach ($feeds as $key => $feed) {
         $post = new \App\Api\Vk\Feed\Types\Post($feed);
-        $post->prepare($groups[$key]);
+        $result = $post->prepare($groups[$key]);
 
-        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
-        call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+        if ($result == true) {
+            $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
+            call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+        }
     }
 });
 

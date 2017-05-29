@@ -71,6 +71,8 @@ class Post extends BaseType {
         ],
     ];
 
+    protected $sender_queue = [];
+
     /**
      * @author MY
      * @param array $group
@@ -79,23 +81,40 @@ class Post extends BaseType {
     public function prepare(array $group)
     {
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
+        $group_name = '<b>' . $group['name'] . '</b>' . PHP_EOL;
+        $text = $group_name.$this->text;
+
+        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
 
         if (count($this->attachments) > 0) {
             $attachment = $this->attachments[0];
             if (get_class($attachment) == Photo::class) {
-                $this->setMethod($attachment->getMethod());
                 if (!empty($this->text)) {
-                    if ($attachment->hasParam('caption')) {
-                        $key = 'caption';
+                    if (strlen($text) < 200) {
+                        $this->setMethod($attachment->getMethod());
+                        $attachment->addParam('caption', $text);
+                        call_user_func_array([$bot, $this->getMethod()], [
+                            env('TELEGRAM_CHAT_ID'),
+                            $attachment->getParam('photo'),
+                            $attachment->getParam('caption')
+                        ]);
                     }
-                    elseif ($attachment->hasParam('text')) {
-                        $key = 'text';
+                    else {
+                        call_user_func_array([$bot, $attachment->getMethod()], [
+                            env('TELEGRAM_CHAT_ID'),
+                            $attachment->getParam('photo')
+                        ]);
+
+                        call_user_func_array([$bot, $this->getMethod()], [
+                            env('TELEGRAM_CHAT_ID'),
+                            $text,
+                            'HTML',
+                            true
+                        ]);
                     }
-                    if (isset($key)) {
-                        $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam($key);
-                        $attachment->addParam($key, $text);
-                    }
+                    return false;
                 }
+                $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
             elseif (get_class($attachment) == Video::class) {
@@ -122,11 +141,13 @@ class Post extends BaseType {
 //                    }
 //                }
 //            }
+            $this->addParam('parseMode', 'HTML');
         }
         else {
-            $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
+            $this->addParam('text', $group_name . $this->text);
+            $this->addParam('parseMode', 'HTML');
+            $this->addParam('disable_preview', true);
         }
-        $this->addParam('parseMode', 'HTML');
 
         return true;
     }
