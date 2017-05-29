@@ -21,8 +21,8 @@ class Resolver {
         }
 
         $className = 'App\Api\Vk\Attachments\Types\\' . ucfirst($raw['type']);
-        
-        if (is_object($className)) {
+
+        if (in_array($raw['type'], ['doc', 'photo', 'video', 'link'])) {
             return new $className($raw[$raw['type']]);
         }
         else {
