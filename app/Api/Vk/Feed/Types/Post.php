@@ -93,7 +93,6 @@ class Post extends BaseType {
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
         $group_name = '<b>' . $group['name'] . '</b>' . PHP_EOL;
         $text = $group_name.$this->text;
-        $this->date += 1; //Увеличиваем чтобы не повторялись сообщения
 
         $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
 
@@ -103,7 +102,7 @@ class Post extends BaseType {
                 if (!empty($this->text)) {
                     if (strlen($text) < 200) {
                         $this->setMethod($attachment->getMethod());
-                        $attachment->addParam('caption', $text);
+                        $attachment->addParam('caption', $group['name'] . PHP_EOL . $this->text);
                         call_user_func_array([$bot, $this->getMethod()], [
                             env('TELEGRAM_CHAT_ID'),
                             $attachment->getParam('photo'),
@@ -125,7 +124,7 @@ class Post extends BaseType {
                     }
                     return [
                         'is_send' => false,
-                        'date' => $this->date
+                        'date' => ++$this->date
                     ];
                 }
                 $attachment->addParam('caption', $group['name']);
@@ -143,7 +142,7 @@ class Post extends BaseType {
 
                 return [
                     'is_send' => true,
-                    'date' => $this->date
+                    'date' => ++$this->date
                 ];
             }
             else {
