@@ -50,6 +50,10 @@ class CheckFeed extends Command
             'start_time' => $user->last_date
         ]);
 
+        $user->update([
+            'last_date' => time()
+        ]);
+
         $feeds = $response['response']['items'];
 
         $groups = $response['response']['groups'];
@@ -63,12 +67,6 @@ class CheckFeed extends Command
                 $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
                 call_user_func_array([$bot, $post->getMethod()], $post->getParams());
             }
-        }
-
-        if (!empty($feeds)) {
-            $user->update([
-                'last_date' => $result['date']
-            ]);
         }
 
         echo count($feeds) . ' send' . PHP_EOL;
