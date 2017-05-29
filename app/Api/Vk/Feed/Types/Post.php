@@ -114,6 +114,7 @@ class Post extends BaseType {
                     }
                     return false;
                 }
+                $attachment->addParam('caption', $text);
                 $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
