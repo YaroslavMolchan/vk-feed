@@ -4,10 +4,10 @@ namespace App\Api\Vk\Feed\Types;
 
 use App\Api\Vk\Attachments\Resolver;
 use App\Api\Vk\Attachments\Types\Doc;
-use App\Api\Vk\Attachments\Types\Link;
 use App\Api\Vk\Attachments\Types\Photo;
 use App\Api\Vk\Attachments\Types\Video;
 use App\Api\Vk\Feed\BaseType;
+use App\Group;
 
 class Post extends BaseType {
 
@@ -66,7 +66,7 @@ class Post extends BaseType {
             'type' => 'string',
         ],
         'source_id' => [
-            'type' => 'int',
+            'type' => 'int'
         ],
         'post_id' => [
             'type' => 'int',
@@ -85,12 +85,13 @@ class Post extends BaseType {
 
     /**
      * @author MY
-     * @param array $group
      * @return array
      */
-    public function prepare(array $group)
+    public function prepare()
     {
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
+        $group = $this->groups->where('id', abs($this->source_id))->first();
+
         $group_name = '<b>' . $group['name'] . '</b>' . PHP_EOL;
         $text = $group_name.$this->text;
 

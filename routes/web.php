@@ -14,7 +14,20 @@
 use App\User;
 use VK\VK;
 
-$app->get('/', function () use ($app) {
+$app->get('/{$telegram_id?}', [
+    'as' => 'home', 'uses' => 'HomeController@index'
+]);
+
+$app->get('login', [
+    'as' => 'login', 'uses' => 'LoginController@login'
+]);
+
+$app->get('callback/{telegram_id}/{code}', [
+    'as' => 'callback', 'uses' => 'LoginController@callback'
+]);
+
+
+$app->get('/1', function () use ($app) {
 
     $data = '{
 "response": {
@@ -140,7 +153,7 @@ $app->get('/', function () use ($app) {
 "next_from": "1/16_1496005200_5"
 }
 }';
-$item = json_decode($data, true)['response']['items'][0];
+    $item = json_decode($data, true)['response']['items'][0];
     $post = new \App\Api\Vk\Feed\Types\Post($item);
     $post->prepare(json_decode($data, true)['response']['groups'][0]);
 
@@ -164,25 +177,46 @@ $item = json_decode($data, true)['response']['items'][0];
 //    ])['response']['items'];
 });
 
+$app->get('/create', function () use ($app) {
+    App\User::create([
+        'telegram_id' => env('TELEGRAM_CHAT_ID'),
+        'vk_id' => env('VK_ID'),
+        'access_token' => env('VK_ACCESS_TOKEN'),
+    ]);
+});
+
 $app->get('/test', function () use ($app) {
-    $user = User::where('telegram_id', 67852056)->first();
-    $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
+//    $user = User::where('telegram_id', 67852056)->first();
+    $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), '671c1c913f879275cb53cb23e692259205936afb291e8adfa6f83260364ff7124e5366fb1d7a566870438');
     $vk->setApiVersion(5.64);
 
     $response = $vk->api('newsfeed.get', [
         'filters' => 'post',
         'count' => 100,
-        'start_time' => $user->last_date
+        'start_time' => 123
     ]);
+
+    if (!isset($response['response'])) {
+        throw new \Exception('Can`t get VK.com response');
+    }
+
+//    $groups = collect($response['response']['groups'])->each(function ($item) {
+//        \App\Group::updateOrCreate([
+//            'group_id' => $item['id']
+//        ], [
+//            'screen_name' => $item['screen_name'],
+//            'name' => $item['name'],
+//            'photo' => $item['photo_200'],
+//        ]);
+//    });
+
+    $groups = collect($response['response']['groups']);
 
     $feeds = $response['response']['items'];
 
-    $groups = $response['response']['groups'];
-
     foreach ($feeds as $key => $feed) {
-        $post = new \App\Api\Vk\Feed\Types\Post($feed);
-        $group = isset($groups[$key]) ? $groups[$key] : ['name' => 'Неизвестно'];
-        $result = $post->prepare($group);
+        $post = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
+        $result = $post->prepare();
 
         if ($result['is_send'] == true) {
             $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
@@ -198,19 +232,3 @@ $app->get('/test', function () use ($app) {
 
     echo count($feeds) . ' send';
 });
-
-$app->get('/create', function () use ($app) {
-    App\User::create([
-        'telegram_id' => env('TELEGRAM_CHAT_ID'),
-        'vk_id' => env('VK_ID'),
-        'access_token' => env('VK_ACCESS_TOKEN'),
-    ]);
-});
-
-$app->get('login', [
-    'as' => 'login', 'uses' => 'LoginController@login'
-]);
-
-$app->get('callback/{telegram_id}/{code}', [
-    'as' => 'callback', 'uses' => 'LoginController@callback'
-]);

@@ -50,18 +50,19 @@ class CheckFeed extends Command
             'start_time' => $user->last_date
         ]);
 
-        $user->update([
-            'last_date' => time()
-        ]);
-
         $feeds = $response['response']['items'];
 
-        $groups = $response['response']['groups'];
+        $groups = collect($response['response']['groups']);
 
         foreach ($feeds as $key => $feed) {
-            $post = new \App\Api\Vk\Feed\Types\Post($feed);
-            $group = isset($groups[$key]) ? $groups[$key] : ['name' => 'Неизвестно'];
-            $result = $post->prepare($group);
+            $post = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
+            $result = $post->prepare();
+
+            if ($key < 1) {
+                $user->update([
+                    'last_date' => $result['date']
+                ]);
+            }
 
             if ($result['is_send'] == true) {
                 $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));

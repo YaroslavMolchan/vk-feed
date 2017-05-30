@@ -2,6 +2,7 @@
 
 namespace App\Api\Vk\Feed;
 use App\Contracts\Vk\SenderInterface;
+use Illuminate\Support\Collection;
 
 /**
  * @author MY
@@ -40,6 +41,13 @@ class BaseType implements SenderInterface
      */
     protected $date;
 
+    /**
+     * содержит массив объектов сообществ, которые присутствуют в новостях
+     * @author MY
+     * @var Collection
+     */
+    protected $groups;
+
     protected $attributes;
 
     /**
@@ -55,9 +63,11 @@ class BaseType implements SenderInterface
     /**
      * BaseType constructor.
      * @param array $raw
+     * @param Collection $groups
      */
-    public function __construct(array $raw)
+    public function __construct(array $raw, Collection &$groups)
     {
+        $this->groups = $groups;
         foreach ($this->attributes as $name => $params) {
             if (!array_key_exists($name, $raw)) {
                 continue;
@@ -66,6 +76,9 @@ class BaseType implements SenderInterface
             if ($params['type'] != 'array' && $params['type'] != 'object') {
                 $this->$name = $raw[$name];
                 settype($this->$name, $params['type']);
+                if (isset($params['function'])) {
+                    $this->$name = call_user_func($params['function'], $raw[$name]);
+                }
             }
             elseif ($params['type'] == 'array') {
                 settype($this->$name, $params['type']);
