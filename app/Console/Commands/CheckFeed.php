@@ -42,6 +42,7 @@ class CheckFeed extends Command
      */
     public function handle()
     {
+        $user = User::where('telegram_id', 67852056)->first();
         $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
         $vk->setApiVersion(5.64);
 
