@@ -8,6 +8,8 @@ use App\Api\Vk\Attachments\Types\Photo;
 use App\Api\Vk\Attachments\Types\Video;
 use App\Api\Vk\Feed\BaseType;
 use App\Group;
+use App\Jobs\TransferFeedJob;
+use Carbon\Carbon;
 
 class Post extends BaseType {
 
@@ -74,6 +76,9 @@ class Post extends BaseType {
         'date' => [
             'type' => 'int',
         ],
+        'marked_as_ads' => [
+            'type' => 'int',
+        ],
         'attachments' => [
             'type' => 'array',
             'object' => Resolver::class,
@@ -89,10 +94,18 @@ class Post extends BaseType {
      */
     public function prepare()
     {
+        //Пропускаем рекламу
+        if ($this->marked_as_ads == 1) {
+            return [
+                'is_send' => false,
+                'date' => ++$this->date
+            ];
+        }
+
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
         $group = $this->groups->where('id', abs($this->source_id))->first();
 
-        $group_name = '<b>' . $group['name'] . '</b>' . PHP_EOL;
+        $group_name = '<b>' . $group['name'] . '</b> ' . $group['screen_name'] . PHP_EOL;
         $text = $group_name.$this->text;
 
         $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
@@ -104,31 +117,35 @@ class Post extends BaseType {
                     if (strlen($text) < 200) {
                         $this->setMethod($attachment->getMethod());
                         $attachment->addParam('caption', $group['name'] . PHP_EOL . $this->text);
-                        call_user_func_array([$bot, $this->getMethod()], [
+                        dispatch(new TransferFeedJob($this->getMethod(), [
                             env('TELEGRAM_CHAT_ID'),
                             $attachment->getParam('photo'),
                             $attachment->getParam('caption')
-                        ]);
+                        ]));
                     }
                     else {
-                        call_user_func_array([$bot, $attachment->getMethod()], [
-                            env('TELEGRAM_CHAT_ID'),
-                            $attachment->getParam('photo')
-                        ]);
+                        //Паблик Подслушано отправляет разделитель в виде картинки, его не постим
+                        if ($this->source_id != -34215577) {
+                            dispatch(new TransferFeedJob($attachment->getMethod(), [
+                                env('TELEGRAM_CHAT_ID'),
+                                $attachment->getParam('photo')
+                            ]));
+                        }
 
-                        call_user_func_array([$bot, $this->getMethod()], [
+                        $job = (new TransferFeedJob($this->getMethod(), [
                             env('TELEGRAM_CHAT_ID'),
                             $text,
                             'HTML',
                             true
-                        ]);
+                        ]))->delay(Carbon::now()->addSecond());
+                        dispatch($job);
                     }
                     return [
                         'is_send' => false,
                         'date' => ++$this->date
                     ];
                 }
-                $attachment->addParam('caption', $group['name']);
+                $attachment->addParam('caption', $group['name'] . ' ' . $group['screen_name']);
                 $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }

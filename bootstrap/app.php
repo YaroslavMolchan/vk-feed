@@ -78,6 +78,7 @@ $app->singleton(
 |
 */
 $app->register(Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class);
+$app->register(\Illuminate\Redis\RedisServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 
 // $app->register(App\Providers\AuthServiceProvider::class);

@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Helpers;
+use App\Jobs\TransferFeedJob;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use TelegramBot\Api\BotApi;
 use VK\VK;
@@ -40,7 +42,6 @@ class CheckFeed extends Command
      */
     public function handle()
     {
-        $user = User::where('telegram_id', 67852056)->first();
         $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
         $vk->setApiVersion(5.64);
 
@@ -65,11 +66,13 @@ class CheckFeed extends Command
             }
 
             if ($result['is_send'] == true) {
-                $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
-                call_user_func_array([$bot, $post->getMethod()], $post->getParams());
+                $job = (new TransferFeedJob($post->getMethod(), $post->getParams()))->delay(Carbon::now()->addSecond());
+                dispatch($job);
             }
         }
 
         echo count($feeds) . ' send' . PHP_EOL;
+
+        return;
     }
 }
