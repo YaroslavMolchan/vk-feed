@@ -117,11 +117,13 @@ class Post extends BaseType {
                     if (strlen($text) < 200) {
                         $this->setMethod($attachment->getMethod());
                         $attachment->addParam('caption', $group['name'] . PHP_EOL . $this->text);
-                        dispatch(new TransferFeedJob($this->getMethod(), [
+
+                        $job = (new TransferFeedJob($this->getMethod(), [
                             env('TELEGRAM_CHAT_ID'),
                             $attachment->getParam('photo'),
                             $attachment->getParam('caption')
-                        ]));
+                        ]))->delay(Carbon::now()->addSecond();
+                        dispatch($job);
                     }
                     else {
                         //Паблик Подслушано отправляет разделитель в виде картинки, его не постим
@@ -132,13 +134,12 @@ class Post extends BaseType {
                             ]));
                         }
 
-                        $job = (new TransferFeedJob($this->getMethod(), [
+                        dispatch(new TransferFeedJob($this->getMethod(), [
                             env('TELEGRAM_CHAT_ID'),
                             $text,
                             'HTML',
                             true
-                        ]))->delay(Carbon::now()->addSecond());
-                        dispatch($job);
+                        ]));
                     }
                     return [
                         'is_send' => false,
