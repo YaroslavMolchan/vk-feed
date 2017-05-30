@@ -187,7 +187,7 @@ $app->get('/create', function () use ($app) {
 
 $app->get('/test', function () use ($app) {
 //    $user = User::where('telegram_id', 67852056)->first();
-    $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), '671c1c913f879275cb53cb23e692259205936afb291e8adfa6f83260364ff7124e5366fb1d7a566870438');
+    $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), '');
     $vk->setApiVersion(5.64);
 
     $response = $vk->api('newsfeed.get', [
