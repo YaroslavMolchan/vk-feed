@@ -122,7 +122,7 @@ class Post extends BaseType {
                             env('TELEGRAM_CHAT_ID'),
                             $attachment->getParam('photo'),
                             $attachment->getParam('caption')
-                        ]))->delay(Carbon::now()->addSecond();
+                        ]))->delay(Carbon::now()->addSecond());
                         dispatch($job);
                     }
                     else {
