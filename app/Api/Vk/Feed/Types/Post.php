@@ -105,7 +105,7 @@ class Post extends BaseType {
         $this->addParam('id', env('TELEGRAM_CHAT_ID'));
         $group = $this->groups->where('id', abs($this->source_id))->first();
 
-        $group_name = '<b>' . $group['name'] . '</b> ' . $group['screen_name'] . PHP_EOL;
+        $group_name = '<b>' . $group['name'] . '</b> #' . $group['screen_name'] . PHP_EOL;
         $text = $group_name.$this->text;
 
         $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
@@ -145,7 +145,7 @@ class Post extends BaseType {
                         'date' => ++$this->date
                     ];
                 }
-                $attachment->addParam('caption', $group['name'] . ' ' . $group['screen_name']);
+                $attachment->addParam('caption', $group['name'] . ' #' . $group['screen_name']);
                 $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
             }
@@ -155,7 +155,7 @@ class Post extends BaseType {
             }
             elseif (get_class($attachment) == Doc::class) {
                 $this->setMethod($attachment->getMethod());
-                $attachment->addParam('caption', $group['name'] . ': ' . $this->text);
+                $attachment->addParam('caption', $group['name'] . ' #' . $group['screen_name'] . ': ' . $this->text);
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
 
                 return [
