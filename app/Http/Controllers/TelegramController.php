@@ -7,6 +7,7 @@ use App\Helpers\Vk\Helper;
 use App\Helpers\Vk\Messages\Attachments\Doc;
 use App\Helpers\Vk\Messages\Attachments\Location;
 use App\Helpers\Vk\Messages\Attachments\Video;
+use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use TelegramBot\Api\BotApi;
@@ -27,6 +28,30 @@ class TelegramController extends Controller
                 $chat_id = $message->getChat()->getId();
 
                 $telegram->sendMessage($chat_id, route('home', ['telegram_id' => $chat_id]));
+            });
+
+            $bot->command('enable', function ($message) use ($bot, $telegram) {
+                $chat_id = $message->getChat()->getId();
+
+                $user = User::whereTelegramId($chat_id);
+
+                $user->update([
+                    'is_enabled' => true
+                ]);
+
+                $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
+            });
+            
+            $bot->command('disable', function ($message) use ($bot, $telegram) {
+                $chat_id = $message->getChat()->getId();
+
+                $user = User::whereTelegramId($chat_id);
+
+                $user->update([
+                    'is_enabled' => false
+                ]);
+
+                $telegram->sendMessage($chat_id, 'News Feed disabled, to enable type: /enable');
             });
 
             $bot->on(function($update) use ($telegram){

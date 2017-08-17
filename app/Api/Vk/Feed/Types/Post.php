@@ -4,6 +4,7 @@ namespace App\Api\Vk\Feed\Types;
 
 use App\Api\Vk\Attachments\Resolver;
 use App\Api\Vk\Attachments\Types\Doc;
+use App\Api\Vk\Attachments\Types\Link;
 use App\Api\Vk\Attachments\Types\Photo;
 use App\Api\Vk\Attachments\Types\Video;
 use App\Api\Vk\Feed\BaseType;
@@ -11,10 +12,12 @@ use App\Group;
 use App\Jobs\TransferFeedJob;
 use Carbon\Carbon;
 
-class Post extends BaseType {
+class Post extends BaseType
+{
 
     /**
      * находится в записях со стен и содержит текст записи
+     *
      * @author MY
      * @var string
      */
@@ -22,6 +25,7 @@ class Post extends BaseType {
 
     /**
      * находится в записях со стен, содержит тип новости (post или copy)
+     *
      * @author MY
      * @var string
      */
@@ -29,6 +33,7 @@ class Post extends BaseType {
 
     /**
      * находится в записях со стен, в которых имеется информация о местоположении
+     *
      * @author MY
      * @var array
      */
@@ -36,6 +41,7 @@ class Post extends BaseType {
 
     /**
      * находится в записях со стен и содержит массив объектов, которые прикреплены к текущей новости
+     *
      * @author MY
      * @link https://vk.com/dev/objects/attachments_w
      * @var array
@@ -44,6 +50,7 @@ class Post extends BaseType {
 
     /**
      * время публикации новости в формате unixtime
+     *
      * @author MY
      * @var int
      */
@@ -51,6 +58,7 @@ class Post extends BaseType {
 
     /**
      * массив, содержащий историю репостов для записи.
+     *
      * @author MY
      * @var BaseType[]
      */
@@ -58,29 +66,30 @@ class Post extends BaseType {
 
     /**
      * поле не описано в документации, но и так всё понятно
+     *
      * @author MY
      * @var int
      */
     protected $marked_as_ads;
 
     protected $attributes = [
-        'text' => [
+        'text'          => [
             'type' => 'string',
         ],
-        'source_id' => [
+        'source_id'     => [
             'type' => 'int'
         ],
-        'post_id' => [
+        'post_id'       => [
             'type' => 'int',
         ],
-        'date' => [
+        'date'          => [
             'type' => 'int',
         ],
         'marked_as_ads' => [
             'type' => 'int',
         ],
-        'attachments' => [
-            'type' => 'array',
+        'attachments'   => [
+            'type'   => 'array',
             'object' => Resolver::class,
             'method' => 'make'
         ],
@@ -98,7 +107,7 @@ class Post extends BaseType {
         if ($this->isAds()) {
             return [
                 'is_send' => false,
-                'date' => ++$this->date
+                'date'    => ++$this->date
             ];
         }
 
@@ -106,7 +115,7 @@ class Post extends BaseType {
         $group = $this->groups->where('id', abs($this->source_id))->first();
 
         $group_name = '<b>' . $group['name'] . '</b> #' . $group['screen_name'] . PHP_EOL;
-        $text = $group_name.$this->text;
+        $text       = $group_name . $this->text;
 
         if (count($this->attachments) > 0) {
             $attachment = $this->attachments[0];
@@ -122,8 +131,7 @@ class Post extends BaseType {
                             $attachment->getParam('caption')
                         ]))->delay(Carbon::now()->addSecond());
                         dispatch($job);
-                    }
-                    else {
+                    } else {
                         //Паблик Подслушано отправляет разделитель в виде картинки, его не постим
                         if ($this->isSourceNeedToSkip()) {
                             dispatch(new TransferFeedJob($attachment->getMethod(), [
@@ -139,36 +147,39 @@ class Post extends BaseType {
                             true
                         ]));
                     }
+
                     return [
                         'is_send' => false,
-                        'date' => ++$this->date
+                        'date'    => ++$this->date
                     ];
                 }
                 $attachment->addParam('caption', $group['name'] . ' #' . $group['screen_name']);
                 $this->setMethod($attachment->getMethod());
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
-            }
-            elseif (get_class($attachment) == Video::class) {
+            } elseif (get_class($attachment) == Video::class) {
                 $text = '<b>' . $group['name'] . '</b>' . PHP_EOL . $this->text . PHP_EOL . $attachment->getParam('text');
                 $this->addParam('text', $text);
-            }
-            elseif (get_class($attachment) == Doc::class) {
+            } elseif (get_class($attachment) == Doc::class) {
                 $this->setMethod($attachment->getMethod());
                 $attachment->addParam('caption', $group['name'] . ' #' . $group['screen_name'] . ': ' . $this->text);
                 $this->setParams(array_merge($this->getParams(), $attachment->getParams()));
 
                 return [
                     'is_send' => true,
-                    'date' => ++$this->date
+                    'date'    => ++$this->date
                 ];
-            }
-            else {
+            } elseif (get_class($attachment) == Link::class) {
+                // Пропускаем посты с ссылками, позже может реализую вывод ссылки
+                return [
+                    'is_send' => false,
+                    'date'    => ++$this->date
+                ];
+            } else {
                 $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
             }
 
             $this->addParam('parseMode', 'HTML');
-        }
-        else {
+        } else {
             $this->addParam('text', $group_name . $this->text);
             $this->addParam('parseMode', 'HTML');
             $this->addParam('disable_preview', true);
@@ -176,7 +187,7 @@ class Post extends BaseType {
 
         return [
             'is_send' => true,
-            'date' => ++$this->date
+            'date'    => ++$this->date
         ];
     }
 

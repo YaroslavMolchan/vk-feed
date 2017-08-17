@@ -42,33 +42,36 @@ class CheckFeed extends Command
      */
     public function handle()
     {
-        $user = User::where('telegram_id', 67852056)->first();
-        $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
-        $vk->setApiVersion(5.64);
+        $users = User::where('is_enabled', true)->get();
 
-        $response = $vk->api('newsfeed.get', [
-            'filters' => 'post',
-            'count' => 100,
-            'start_time' => $user->last_date
-        ]);
+        foreach ($users as $user) {
+            $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
+            $vk->setApiVersion(5.64);
 
-        $feeds = $response['response']['items'];
+            $response = $vk->api('newsfeed.get', [
+                'filters'    => 'post',
+                'count'      => 100,
+                'start_time' => $user->last_date
+            ]);
 
-        $groups = collect($response['response']['groups']);
+            $feeds = $response['response']['items'];
 
-        foreach ($feeds as $key => $feed) {
-            $post = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
-            $result = $post->prepare();
+            $groups = collect($response['response']['groups']);
 
-            if ($key < 1) {
-                $user->update([
-                    'last_date' => $result['date']
-                ]);
-            }
+            foreach ($feeds as $key => $feed) {
+                $post   = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
+                $result = $post->prepare();
 
-            if ($result['is_send'] == true) {
-                $job = (new TransferFeedJob($post->getMethod(), $post->getParams()))->delay(Carbon::now()->addSecond());
-                dispatch($job);
+                if ($key < 1) {
+                    $user->update([
+                        'last_date' => $result['date']
+                    ]);
+                }
+
+                if ($result['is_send'] == true) {
+                    $job = (new TransferFeedJob($post->getMethod(), $post->getParams()))->delay(Carbon::now()->addSecond());
+                    dispatch($job);
+                }
             }
         }
 
