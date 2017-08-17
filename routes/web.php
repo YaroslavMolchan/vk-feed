@@ -14,7 +14,7 @@
 use App\User;
 use VK\VK;
 
-$app->get('/{$telegram_id?}', [
+$app->get('/{telegram_id?}', [
     'as' => 'home', 'uses' => 'HomeController@index'
 ]);
 
