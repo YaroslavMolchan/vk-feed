@@ -41,7 +41,7 @@ class TelegramController extends Controller
 
                 $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
             });
-            
+
             $bot->command('disable', function ($message) use ($bot, $telegram) {
                 $chat_id = $message->getChat()->getId();
 
