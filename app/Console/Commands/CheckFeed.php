@@ -72,8 +72,6 @@ class CheckFeed extends Command
             }
         }
 
-        echo count($feeds) . ' send' . PHP_EOL;
-
         return;
     }
 }

@@ -95,7 +95,7 @@ class Post extends BaseType {
     public function prepare()
     {
         //Пропускаем рекламу
-        if ($this->marked_as_ads == 1) {
+        if ($this->isAds()) {
             return [
                 'is_send' => false,
                 'date' => ++$this->date
@@ -107,8 +107,6 @@ class Post extends BaseType {
 
         $group_name = '<b>' . $group['name'] . '</b> #' . $group['screen_name'] . PHP_EOL;
         $text = $group_name.$this->text;
-
-        $bot = new \TelegramBot\Api\BotApi(env('TELEGRAM_BOT_API'));
 
         if (count($this->attachments) > 0) {
             $attachment = $this->attachments[0];
@@ -127,7 +125,7 @@ class Post extends BaseType {
                     }
                     else {
                         //Паблик Подслушано отправляет разделитель в виде картинки, его не постим
-                        if ($this->source_id != -34215577) {
+                        if ($this->isSourceNeedToSkip()) {
                             dispatch(new TransferFeedJob($attachment->getMethod(), [
                                 env('TELEGRAM_CHAT_ID'),
                                 $attachment->getParam('photo')
@@ -168,18 +166,6 @@ class Post extends BaseType {
                 $this->addParam('text', $group['name'] . PHP_EOL . $this->text);
             }
 
-//            if (get_class($attachment) == Link::class) {
-//                $method = $attachment->senderMethod();
-//                $params = $attachment->senderParams();
-//                if (!empty($this->senderParams()['text'])) {
-//                    if (isset($params['caption'])) {
-//                        $params['caption'] = $this->senderParams()['text'] . PHP_EOL . $attachment->senderParams()['caption'];
-//                    }
-//                    elseif (isset($params['text'])) {
-//                        $params['text'] = $this->senderParams()['text'] . PHP_EOL . $attachment->senderParams()['text'];
-//                    }
-//                }
-//            }
             $this->addParam('parseMode', 'HTML');
         }
         else {
@@ -208,5 +194,21 @@ class Post extends BaseType {
     public function getParams()
     {
         return $this->params;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isAds()
+    {
+        return $this->marked_as_ads == 1;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSourceNeedToSkip()
+    {
+        return $this->source_id != -34215577;
     }
 }
