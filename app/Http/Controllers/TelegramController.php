@@ -36,7 +36,8 @@ class TelegramController extends Controller
                 $user = User::whereTelegramId($chat_id);
 
                 $user->update([
-                    'is_enabled' => true
+                    'is_enabled' => true,
+                    'last_date' => time()
                 ]);
 
                 $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
