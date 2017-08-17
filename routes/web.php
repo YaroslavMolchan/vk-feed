@@ -14,10 +14,12 @@
 use App\User;
 use VK\VK;
 
-$app->get('/{telegram_id?}', [
+$app->get('/', [
     'as' => 'home', 'uses' => 'HomeController@index'
 ]);
-
+$app->get('user[/{name}]', function ($name = null) {
+    return $name;
+});
 $app->get('login', [
     'as' => 'login', 'uses' => 'LoginController@login'
 ]);

@@ -39,7 +39,7 @@ class LoginController extends Controller
          * Может быть 2 случая: когда он уже подключился с другого телефона или с другого чата написал.
          */
         if (User::whereVkId($response['user_id'])->count() > 0) {
-            throw new LoginCallbackException('You ate already connected to bot from another number.');
+            throw new LoginCallbackException('You are already connected to bot from another number.');
         }
 
         $user = User::create([

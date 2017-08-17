@@ -10,9 +10,8 @@ use VK\VKException;
 
 class HomeController extends Controller
 {
-    public function index(Request $request, $telegram_id = null)
+    public function index()
     {
-        dd($telegram_id);
         return view('home.index');
     }
 }

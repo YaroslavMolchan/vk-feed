@@ -35,12 +35,16 @@ class TelegramController extends Controller
 
                 $user = User::whereTelegramId($chat_id);
 
-                $user->update([
-                    'is_enabled' => true,
-                    'last_date' => time()
-                ]);
+                if (is_null($user)) {
+                    $telegram->sendMessage($chat_id, 'You are not connected to bot.');
+                } else {
+                    $user->update([
+                        'is_enabled' => true,
+                        'last_date' => time()
+                    ]);
 
-                $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
+                    $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
+                }
             });
 
             $bot->command('disable', function ($message) use ($bot, $telegram) {
@@ -48,11 +52,15 @@ class TelegramController extends Controller
 
                 $user = User::whereTelegramId($chat_id);
 
-                $user->update([
-                    'is_enabled' => false
-                ]);
+                if (is_null($user)) {
+                    $telegram->sendMessage($chat_id, 'You are not connected to bot.');
+                } else {
+                    $user->update([
+                        'is_enabled' => false
+                    ]);
 
-                $telegram->sendMessage($chat_id, 'News Feed disabled, to enable type: /enable');
+                    $telegram->sendMessage($chat_id, 'News Feed disabled, to enable type: /enable');
+                }
             });
 
             $bot->on(function($update) use ($telegram){
