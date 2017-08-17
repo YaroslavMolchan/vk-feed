@@ -33,11 +33,11 @@ class TelegramController extends Controller
             $bot->command('enable', function ($message) use ($bot, $telegram) {
                 $chat_id = $message->getChat()->getId();
 
-                $user = User::whereTelegramId($chat_id);
-
-                $user->update([
-                    'is_enabled' => true
-                ]);
+//                $user = User::whereTelegramId($chat_id);
+//
+//                $user->update([
+//                    'is_enabled' => true
+//                ]);
 
                 $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
             });
