@@ -17,9 +17,15 @@ use VK\VK;
 $app->get('/', [
     'as' => 'home', 'uses' => 'HomeController@index'
 ]);
+
+$app->get('/telegram/{id}', [
+    'as' => 'telegram-redirect', 'uses' => 'HomeController@telegram'
+]);
+
 $app->get('user[/{name}]', function ($name = null) {
     return $name;
 });
+
 $app->get('login', [
     'as' => 'login', 'uses' => 'LoginController@login'
 ]);

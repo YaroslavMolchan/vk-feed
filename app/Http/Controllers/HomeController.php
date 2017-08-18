@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\LoginCallbackException;
-use App\User;
 use Illuminate\Http\Request;
-use VK\VK;
-use VK\VKException;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('home.index');
+        $telegram_id = $request->cookie('telegram_id');
+
+        return view('home', compact('telegram_id'));
+    }
+
+    public function telegram($id)
+    {
+        $cookie = new Cookie('telegram_id', $id);
+
+        return redirect()->route('home')->cookie($cookie);
     }
 }
