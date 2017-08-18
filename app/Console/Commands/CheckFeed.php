@@ -54,6 +54,10 @@ class CheckFeed extends Command
                 'start_time' => $user->last_date
             ]);
 
+            if (!array_key_exists('response', $response)) {
+                return;
+            }
+
             $feeds = $response['response']['items'];
 
             $groups = collect($response['response']['groups']);
