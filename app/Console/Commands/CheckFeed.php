@@ -64,7 +64,7 @@ class CheckFeed extends Command
 
             foreach ($feeds as $key => $feed) {
                 $post   = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
-                $result = $post->prepare();
+                $result = $post->prepare($user->telegram_id);
 
                 if ($key < 1) {
                     $user->update([

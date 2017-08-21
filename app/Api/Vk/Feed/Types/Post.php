@@ -101,7 +101,7 @@ class Post extends BaseType
      * @author MY
      * @return array
      */
-    public function prepare()
+    public function prepare($chat_id)
     {
         //Пропускаем рекламу
         if ($this->isAds()) {
@@ -111,7 +111,7 @@ class Post extends BaseType
             ];
         }
 
-        $this->addParam('id', env('TELEGRAM_CHAT_ID'));
+        $this->addParam('id', $chat_id);
         $group = $this->groups->where('id', abs($this->source_id))->first();
 
         $group_name = '<b>' . $group['name'] . '</b> #' . $group['screen_name'] . PHP_EOL;
@@ -126,7 +126,7 @@ class Post extends BaseType
                         $attachment->addParam('caption', $group['name'] . PHP_EOL . $this->text);
 
                         $job = (new TransferFeedJob($this->getMethod(), [
-                            env('TELEGRAM_CHAT_ID'),
+                            $chat_id,
                             $attachment->getParam('photo'),
                             $attachment->getParam('caption')
                         ]))->delay(Carbon::now()->addSecond());
@@ -135,13 +135,13 @@ class Post extends BaseType
                         //Паблик Подслушано отправляет разделитель в виде картинки, его не постим
                         if ($this->isSourceNeedToSkip()) {
                             dispatch(new TransferFeedJob($attachment->getMethod(), [
-                                env('TELEGRAM_CHAT_ID'),
+                                $chat_id,
                                 $attachment->getParam('photo')
                             ]));
                         }
 
                         dispatch(new TransferFeedJob($this->getMethod(), [
-                            env('TELEGRAM_CHAT_ID'),
+                            $chat_id,
                             $text,
                             'HTML',
                             true
