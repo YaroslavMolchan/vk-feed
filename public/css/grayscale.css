@@ -183,6 +183,14 @@ a {
     outline: none;
     background-color: #42DCA3; }
 
+.code-form {
+  display: none;
+}
+.input {
+  color: #42DCA3;
+  border: 1px solid #42DCA3;
+  background-color: transparent; }
+
 ul.banner-social-buttons {
   margin-top: 0; }
   @media (max-width: 1199px) {

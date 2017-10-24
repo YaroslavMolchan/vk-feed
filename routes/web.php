@@ -30,8 +30,8 @@ $app->get('login', [
     'as' => 'login', 'uses' => 'LoginController@login'
 ]);
 
-$app->get('callback/{telegram_id}/{code}', [
-    'as' => 'callback', 'uses' => 'LoginController@callback'
+$app->post('register', [
+    'as' => 'register', 'uses' => 'RegisterController@handle'
 ]);
 
 $app->post('/telegram/webhook', 'TelegramController@webhook');

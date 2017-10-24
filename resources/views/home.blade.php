@@ -86,8 +86,16 @@
         <div class="col-lg-8 mx-auto">
             <h2>Подключение</h2>
             <p>1. Начните чат с <a href="https://t.me/vkfeedmbot" target="_blank">ботом</a> написав /start.</p>
-            <p>2. <a href="{!! route('login') !!}" target="_blank">Разрешите</a>  боту просматривать вашу стену VK.</p>
-            <p>3. Скопируйте URL на который вы были перенаправлены после разрешения и вставьте его <a href="#">сюда</a>.</p>
+            <p>2. <a href="{!! route('login') !!}" target="_blank">Разрешите</a> боту просматривать вашу стену VK.</p>
+            <p>3. Скопируйте URL на который вы были перенаправлены после разрешения и вставьте его <a class="form-toggler" href="#">сюда</a>.
+                <div class="code-form">
+                    <form action="{!! route('register') !!}">
+                        <input type="input" class="input" name="code" />
+                        <input type="hidden" name="telegram_id" value="{!! $telegramId !!}" />
+                        <input type="submit" class="btn-default" value="OK" />
+                    </form>
+                </div>
+            </p>
             <p>4. Читайте ленту новостей в чате с ботом. (Рекомендую отключить уведомления от бота)</p>
         </div>
     </div>
@@ -122,7 +130,7 @@
 <!-- Footer -->
 <footer>
     <div class="container text-center">
-        <p>Copyright &copy; Jadson 2017</p>
+        <p>Copyright &copy; Jadson {!! date('Y') !!}</p>
     </div>
 </footer>
 

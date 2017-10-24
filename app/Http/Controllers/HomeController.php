@@ -9,14 +9,14 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $telegram_id = $request->cookie('telegram_id');
+        $telegramId = $request->cookie('telegramId');
 
-        return view('home', compact('telegram_id'));
+        return view('home', compact('telegramId'));
     }
 
     public function telegram($id)
     {
-        $cookie = new Cookie('telegram_id', $id);
+        $cookie = new Cookie('telegramId', $id);
 
         return redirect()->route('home')->cookie($cookie);
     }
