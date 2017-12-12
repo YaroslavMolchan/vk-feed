@@ -6,6 +6,7 @@ use App\Dto\Group;
 use App\Dto\Post;
 use App\Exceptions\FeedRecordsNotFoundException;
 use App\Support\PostsCollection;
+use Illuminate\Support\Collection;
 use VK\VK;
 
 /**
@@ -48,7 +49,7 @@ class VkFeedService
         }
 
         $feeds  = new PostsCollection($response['response']['items']);
-        $groups = collect($response['response']['groups']);
+        $groups = new Collection($response['response']['groups']);
 
         return $feeds->filter(function ($feed) {
             return $this->isRecordPost($feed);

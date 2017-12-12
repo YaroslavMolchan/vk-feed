@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules;
+namespace App\Support;
 
 use App\Contracts\PostCheckerInterface;
 use App\Dto\Group;

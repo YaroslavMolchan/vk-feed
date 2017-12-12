@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Contracts\SenderInterface;
 use App\Dto\TelegramMessage;
 use App\Jobs\SendTelegramMessage;
-use App\Rules\VkPostChecker;
 use App\Support\PostsCollection;
+use App\Support\VkPostChecker;
 use Carbon\Carbon;
 
 class TelegramSender implements SenderInterface
