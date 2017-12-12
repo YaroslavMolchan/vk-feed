@@ -32,4 +32,25 @@ class User extends Model
             'last_date' => $postTime
         ]);
     }
+
+    /**
+     * @return bool
+     */
+    public function enable(): bool
+    {
+        return $this->update([
+            'is_enabled' => true,
+            'last_date' => time()
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function disable(): bool
+    {
+        return $this->update([
+            'is_enabled' => false
+        ]);
+    }
 }

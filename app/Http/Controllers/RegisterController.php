@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\LoginCallbackException;
-use App\User;
+use App\Repositories\UserRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use VK\VK;
 use VK\VKException;
@@ -14,51 +14,62 @@ use VK\VKException;
 class RegisterController extends Controller
 {
     /**
-     * @param Request $request
+     * @var UserRepository
      */
-    public function handle(Request $request)
+    private $users;
+
+    /**
+     * RegisterController constructor.
+     *
+     * @param UserRepository $users
+     */
+    public function __construct(UserRepository $users)
+    {
+        $this->users = $users;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handle(Request $request): JsonResponse
     {
         $this->validate($request, [
             'telegram_id' => 'required|exists:users,telegram_id',
             'code'        => 'required'
         ]);
 
-        $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'));
-
-        // if (is_null($code)) {
-        //     throw new LoginCallbackException('Wrong URL, try to authorize again.');
-        // }
+        try {
+            $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'));
+        } catch (VKException $exception) {
+            return response()->json([
+                'message' => 'Внутреняя ошибка, повторите попытку позже.'
+            ], 500);
+        }
 
         try {
-            $response = $vk->getAccessToken($request->input('code')); //, route('callback', ['telegram_id' => $telegram_id])
+            $response = $vk->getAccessToken($request->input('code'));
         } catch (VKException $e) {
             return response()->json([
                 'message' => 'Код уже не актуален, получите новый.'
             ], 420);
-//            throw new LoginCallbackException('Code expired, try to authorize again.');
         }
-
-        // if (User::whereTelegramId($telegram_id)->count() > 0) {
-        //     throw new LoginCallbackException('You are already connected to bot.');
-        // }
 
         /**
          * Может быть 2 случая: когда он уже подключился с другого телефона или с другого чата написал.
          */
-        if (User::whereVkId($response['user_id'])->count() > 0) {
+        if ($this->users->checkVkAccount($response['user_id']) === true) {
             return response()->json([
                 'message' => 'Текущий аккаунт VK уже подключен.'
             ], 420);
-//            throw new LoginCallbackException('You are already connected to bot from another number.');
         }
 
-        $user = User::create([
+        $this->users->create([
             'vk_id'        => $response['user_id'],
             'access_token' => $response['access_token'],
             'telegram_id'  => $request->input('telegram_id')
         ]);
 
-//        return 'Now you connected to bot';
         return response()->json([
             'ok' => true,
             'message' => 'Вы подключились к боту.'

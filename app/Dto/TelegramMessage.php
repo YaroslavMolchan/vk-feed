@@ -32,7 +32,7 @@ class TelegramMessage
      */
     public function __construct(int $chatId, Post $post)
     {
-        $this->id = $chatId;
+        $this->id   = $chatId;
         $this->text = $this->generateTextContent($post);
     }
 

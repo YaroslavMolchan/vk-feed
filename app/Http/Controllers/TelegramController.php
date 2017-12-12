@@ -7,6 +7,7 @@ use App\Helpers\Vk\Helper;
 use App\Helpers\Vk\Messages\Attachments\Doc;
 use App\Helpers\Vk\Messages\Attachments\Location;
 use App\Helpers\Vk\Messages\Attachments\Video;
+use App\Repositories\UserRepository;
 use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +18,21 @@ use VK\VK;
 
 class TelegramController extends Controller
 {
+    /**
+     * @var UserRepository
+     */
+    private $users;
+
+    /**
+     * TelegramController constructor.
+     *
+     * @param UserRepository $users
+     */
+    public function __construct(UserRepository $users)
+    {
+        $this->users = $users;
+    }
+
     public function webhook()
     {
         try {
@@ -24,45 +40,41 @@ class TelegramController extends Controller
 
             $bot = new \TelegramBot\Api\Client('TELEGRAM_BOT_API');
 
-            $bot->command('start', function ($message) use ($bot, $telegram) {
-                $chat_id = $message->getChat()->getId();
+            $bot->command('start', function ($message) use ($telegram) {
+                $chatId = $message->getChat()->getId();
 
-                $telegram->sendMessage($chat_id, route('home', ['telegram_id' => $chat_id]));
+                $telegram->sendMessage($chatId, route('home', ['telegram_id' => $chatId]));
             });
 
-            $bot->command('enable', function ($message) use ($bot, $telegram) {
-                $chat_id = $message->getChat()->getId();
+            $bot->command('enable', function ($message) use ($telegram) {
+                $chatId = $message->getChat()->getId();
 
-                $user = User::whereTelegramId($chat_id);
+                $user = $this->users->findByTelegramId($chatId);
 
-                if (is_null($user)) {
-                    $telegram->sendMessage($chat_id, 'You are not connected to bot.');
+                if (null === $user) {
+                    $telegram->sendMessage($chatId, 'You are not connected to bot.');
                 } else {
-                    $user->update([
-                        'is_enabled' => true,
-                        'last_date' => time()
-                    ]);
+                    $user->enable();
 
-                    $telegram->sendMessage($chat_id, 'News Feed enabled, to disable type: /disable');
+                    $telegram->sendMessage($chatId, 'News Feed enabled, to disable type: /disable');
                 }
             });
 
-            $bot->command('disable', function ($message) use ($bot, $telegram) {
-                $chat_id = $message->getChat()->getId();
+            $bot->command('disable', function ($message) use ($telegram) {
+                $chatId = $message->getChat()->getId();
 
-                $user = User::whereTelegramId($chat_id);
+                $user = $this->users->findByTelegramId($chatId);
 
-                if (is_null($user)) {
-                    $telegram->sendMessage($chat_id, 'You are not connected to bot.');
+                if (null === $user) {
+                    $telegram->sendMessage($chatId, 'You are not connected to bot.');
                 } else {
-                    $user->update([
-                        'is_enabled' => false
-                    ]);
+                    $user->disable();
 
-                    $telegram->sendMessage($chat_id, 'News Feed disabled, to enable type: /enable');
+                    $telegram->sendMessage($chatId, 'News Feed disabled, to enable type: /enable');
                 }
             });
 
+            // Стандартный ответ для бота.
             $bot->on(function($update) use ($telegram){
                 $callback = $update->getCallbackQuery();
                 $telegram->getSender()->answerCallbackQuery($callback->getId());

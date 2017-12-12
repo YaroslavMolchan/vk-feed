@@ -32,9 +32,9 @@ class Post
      */
     public function __construct(array $attributes, Group $group)
     {
-        $this->text = $attributes['text'];
+        $this->text  = $attributes['text'];
         $this->group = $group;
-        $this->date = $attributes['date'];
+        $this->date  = $attributes['date'];
         $this->isAds = (bool) $attributes['marked_as_ads'];
     }
 }

@@ -14,7 +14,9 @@ class LoginController extends Controller
     {
         $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'));
 
-        return redirect()->to($vk->getAuthorizeURL('wall,friends,offline')); //, route('callback', ['telegram_id' => $telegram_id])
+        return redirect()->to(
+            $vk->getAuthorizeURL('wall,friends,offline')
+        );
     }
 
 }

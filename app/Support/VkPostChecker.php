@@ -38,6 +38,7 @@ class VkPostChecker implements PostCheckerInterface
         $list = [
             34215577
         ];
+
         return \in_array($group->id, $list, true);
     }
 }
