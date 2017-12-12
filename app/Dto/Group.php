@@ -5,6 +5,11 @@ namespace App\Dto;
 class Group
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var string
      */
     public $name;
@@ -21,7 +26,8 @@ class Group
      */
     public function __construct(array $attributes)
     {
-        $this->name = $attributes['name'];
+        $this->id          = $attributes['id'];
+        $this->name        = $attributes['name'];
         $this->screen_name = $attributes['screen_name'];
     }
 }

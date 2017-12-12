@@ -51,7 +51,7 @@ class VkFeedService
         $groups = collect($response['response']['groups']);
 
         return $feeds->filter(function ($feed) {
-            return $this->unwantedRecord($feed);
+            return $this->isRecordPost($feed);
         })->map(function ($feed) use ($groups) {
             $group = $groups->where('id', abs($feed['source_id']))->first();
             return new Post($feed, new Group($group));
@@ -59,38 +59,11 @@ class VkFeedService
     }
 
     /**
-     * @param $feed
-     * @return bool
-     */
-    public function unwantedRecord($feed): bool
-    {
-        return  $this->isAdsRecord($feed) || $this->isRecordNotPost($feed) || $this->isRecordInBlackList($feed);
-    }
-
-    /**
      * @param array $feed
      * @return bool
      */
-    public function isAdsRecord(array $feed): bool
-    {
-        return $feed['marked_as_ads'] !== 1;
-    }
-
-    /**
-     * @param array $feed
-     * @return bool
-     */
-    public function isRecordNotPost(array $feed): bool
+    public function isRecordPost(array $feed): bool
     {
         return $feed['type'] === 'post';
-    }
-
-    /**
-     * @param array $feed
-     * @return bool
-     */
-    public function isRecordInBlackList(array $feed): bool
-    {
-        return $feed['source_id'] !== -34215577;
     }
 }

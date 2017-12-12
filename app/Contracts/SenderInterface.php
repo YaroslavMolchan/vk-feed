@@ -10,7 +10,7 @@ interface SenderInterface
      * @param int             $chatId
      * @param PostsCollection $posts
      *
-     * @return void
+     * @return int Дата публикации первой записи
      */
-    public function sendPosts(int $chatId, PostsCollection $posts): void;
+    public function sendPosts(int $chatId, PostsCollection $posts): int;
 }

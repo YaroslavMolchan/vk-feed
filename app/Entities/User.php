@@ -21,4 +21,15 @@ class User extends Model
         'last_date',
         'is_enabled'
     ];
+
+    /**
+     * @param int $postTime
+     * @return bool
+     */
+    public function updateSeenDate(int $postTime): bool
+    {
+        return $this->update([
+            'last_date' => $postTime
+        ]);
+    }
 }

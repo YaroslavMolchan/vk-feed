@@ -65,7 +65,9 @@ class CheckFeed extends Command
                 continue;
             }
 
-            $this->sender->sendPosts($user->telegram_id, $posts);
+            $postTime = $this->sender->sendPosts($user->telegram_id, $posts);
+
+            $user->updateSeenDate($postTime);
         }
     }
 }

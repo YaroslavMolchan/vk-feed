@@ -12,7 +12,17 @@ class Post
     /**
      * @var Group
      */
-    public $group;
+    public  $group;
+
+    /**
+     * @var bool
+     */
+    public $isAds = false;
+
+    /**
+     * @var int
+     */
+    public $date = 0;
 
     /**
      * Group constructor.
@@ -24,5 +34,7 @@ class Post
     {
         $this->text = $attributes['text'];
         $this->group = $group;
+        $this->date = $attributes['date'];
+        $this->isAds = (bool) $attributes['marked_as_ads'];
     }
 }
