@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Helpers;
-use App\Jobs\TransferFeedJob;
-use App\User;
-use Carbon\Carbon;
+use App\Contracts\SenderInterface;
+use App\Exceptions\FeedRecordsNotFoundException;
+use App\Repositories\UserRepository;
+use App\Services\VkFeedService;
 use Illuminate\Console\Command;
-use TelegramBot\Api\BotApi;
-use VK\VK;
 
 class CheckFeed extends Command
 {
@@ -25,60 +23,49 @@ class CheckFeed extends Command
      * @var string
      */
     protected $description = 'Check for news feed';
+    /**
+     * @var UserRepository
+     */
+    private $users;
+    /**
+     * @var SenderInterface
+     */
+    private $sender;
 
     /**
      * Create a new command instance.
      *
+     * @param UserRepository  $users
+     * @param SenderInterface $sender
      */
-    public function __construct()
+    public function __construct(UserRepository $users, SenderInterface $sender)
     {
+        $this->users = $users;
+        $this->sender = $sender;
+
         parent::__construct();
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $users = User::where('is_enabled', true)->get();
+        $users = $this->users->getEnabledUsers();
 
+        /* @var \App\Entities\User $user */
         foreach ($users as $user) {
-            $vk = new VK(env('VK_APP_ID'), env('VK_APP_SECRET'), $user->access_token);
-            $vk->setApiVersion(5.64);
-
-            $response = $vk->api('newsfeed.get', [
-                'filters'    => 'post',
-                'count'      => 100,
-                'start_time' => $user->last_date
-            ]);
-
-            if (!array_key_exists('response', $response)) {
-                return;
+            $service = new VkFeedService($user->access_token);
+            try {
+                $posts = $service->getPosts($user->last_date);
+            } catch (FeedRecordsNotFoundException $e) {
+                // За указанный период времени не было записей, просто пропускаем.
+                continue;
             }
 
-            $feeds = $response['response']['items'];
-
-            $groups = collect($response['response']['groups']);
-
-            foreach ($feeds as $key => $feed) {
-                $post   = new \App\Api\Vk\Feed\Types\Post($feed, $groups);
-                $result = $post->prepare($user->telegram_id);
-
-                if ($key < 1) {
-                    $user->update([
-                        'last_date' => $result['date']
-                    ]);
-                }
-
-                if ($result['is_send'] == true) {
-                    $job = (new TransferFeedJob($post->getMethod(), $post->getParams()))->delay(Carbon::now()->addSecond());
-                    dispatch($job);
-                }
-            }
+            $this->sender->sendPosts($user->telegram_id, $posts);
         }
-
-        return;
     }
 }

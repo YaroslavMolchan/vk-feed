@@ -11,9 +11,5 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        'App\Events\NewFeed' => [
-            'App\Listeners\SendTelegramMessage',
-        ],
-    ];
+    protected $listen = [];
 }

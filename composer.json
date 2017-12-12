@@ -13,7 +13,8 @@
         "barryvdh/laravel-ide-helper": "^2.3",
         "doctrine/dbal": "^2.5",
         "bugsnag/bugsnag-laravel": "^2.0",
-        "illuminate/redis": "^5.4"
+        "illuminate/redis": "^5.4",
+        "prettus/l5-repository": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
