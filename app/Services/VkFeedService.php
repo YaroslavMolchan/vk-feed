@@ -48,23 +48,35 @@ class VkFeedService
             throw new FeedRecordsNotFoundException();
         }
 
-        $feeds  = new PostsCollection($response['response']['items']);
+        $posts  = new PostsCollection($response['response']['items']);
         $groups = new Collection($response['response']['groups']);
 
-        return $feeds->filter(function ($feed) {
-            return $this->isRecordPost($feed);
-        })->map(function ($feed) use ($groups) {
-            $group = $groups->where('id', abs($feed['source_id']))->first();
-            return new Post($feed, new Group($group));
+        return $this->transformPosts($posts, $groups);
+    }
+
+    /**
+     * TODO: Возможно нужно вынести в отдельный класс, в будущем нужно будет ещё обрабатывать вложения.
+     *
+     * @param PostsCollection $posts
+     * @param Collection      $groups
+     * @return PostsCollection
+     */
+    private function transformPosts(PostsCollection $posts, Collection $groups): PostsCollection
+    {
+        return $posts->filter(function ($post) {
+            return $this->isRecordIsPost($post);
+        })->map(function ($post) use ($groups) {
+            $group = $groups->where('id', abs($post['source_id']))->first();
+            return new Post($post, new Group($group));
         });
     }
 
     /**
-     * @param array $feed
+     * @param array $post
      * @return bool
      */
-    public function isRecordPost(array $feed): bool
+    private function isRecordIsPost(array $post): bool
     {
-        return $feed['type'] === 'post';
+        return $post['post_type'] === 'post';
     }
 }

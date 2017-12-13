@@ -51,5 +51,12 @@ class Post
             throw new InvalidArgumentException('Key "marked_as_ads" must be present.');
         }
         $this->isAds = (bool) $attributes['marked_as_ads'];
+
+        // TODO: Думаю это не стоит тут делать, нужно будет вынести логику вложений с dto.
+        //if (\count($attributes['attachments']) > 0) {
+            // Берём только первое вложение, обычно в пабликах этого достаточно.
+            // TODO: Возможно стоит когда нибудь забирать все вложения и выводить их, в версии 3.5 появилась возможность
+            // отправлять альбом картинок или видео.
+        //}
     }
 }
