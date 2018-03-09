@@ -23,6 +23,7 @@ class VkFeedService
      * VkFeedService constructor.
      *
      * @param string $token
+     * @throws \VK\VKException
      */
     public function __construct(string $token)
     {

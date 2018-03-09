@@ -138,6 +138,7 @@
 <script src="/js/jquery.min.js"></script>
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/sweetalert2.all.js"></script>
 
 <!-- Plugin JavaScript -->
 <script src="/js/jquery.easing.min.js"></script>

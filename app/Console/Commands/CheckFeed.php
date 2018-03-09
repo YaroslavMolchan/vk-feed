@@ -50,6 +50,7 @@ class CheckFeed extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws \VK\VKException
      */
     public function handle(): void
     {

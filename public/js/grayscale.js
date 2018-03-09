@@ -61,11 +61,17 @@
             console.log('Notifications cleared', data);
         }).fail(function (response) {
             if (response.status === 422) {
+                var errorsList = '';
                 $.each(response.responseJSON, function (field, message) {
-                    alert(field + ": " + message);
+                    errorsList += message + '<br>'
                 });
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    html: errorsList
+                })
             }
-            console.log('Erorr - can`t clear notifications!', response);
+            console.log('Error - can`t clear notifications!', response);
         });
     });
 
