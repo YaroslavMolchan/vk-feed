@@ -17,16 +17,7 @@ class VkPostChecker implements PostCheckerInterface
      */
     public function passes(Post $post): bool
     {
-        return ! ($this->isAdsRecord($post) || $this->isGroupBlocked($post->group));
-    }
-
-    /**
-     * @param Post $post
-     * @return bool
-     */
-    private function isAdsRecord(Post $post): bool
-    {
-        return $post->isAds === true;
+        return ! $this->isGroupBlocked($post->group);
     }
 
     /**

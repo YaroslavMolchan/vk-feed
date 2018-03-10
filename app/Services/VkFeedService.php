@@ -78,6 +78,6 @@ class VkFeedService
      */
     private function isRecordIsPost(array $post): bool
     {
-        return $post['post_type'] === 'post';
+        return $post['post_type'] === 'post' && empty($post['copy_history']) && $post['marked_as_ads'] == 0;
     }
 }
