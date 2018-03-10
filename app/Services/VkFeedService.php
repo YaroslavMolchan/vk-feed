@@ -37,7 +37,7 @@ class VkFeedService
      * @return PostsCollection
      * @throws FeedRecordsNotFoundException
      */
-    public function getPosts(?int $startTime, int $count = 1): PostsCollection
+    public function getPosts(?int $startTime, int $count = 100): PostsCollection
     {
         $response = $this->client->api('newsfeed.get', [
             'filters'    => 'post',
