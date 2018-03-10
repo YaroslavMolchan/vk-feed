@@ -18,24 +18,11 @@ use VK\VK;
 
 class TelegramController extends Controller
 {
-    /**
-     * @var UserRepository
-     */
-    private $users;
-
-    /**
-     * TelegramController constructor.
-     *
-     * @param UserRepository $users
-     */
-    public function __construct(UserRepository $users)
-    {
-        $this->users = $users;
-    }
-
     public function webhook()
     {
         try {
+            $repository = app()->make(UserRepository::class);
+
             $telegram = new BotApi(env('TELEGRAM_BOT_API'));
 
             $bot = new \TelegramBot\Api\Client('TELEGRAM_BOT_API');
@@ -46,10 +33,10 @@ class TelegramController extends Controller
                 $telegram->sendMessage($chatId, route('home', ['telegram_id' => $chatId]));
             });
 
-            $bot->command('enable', function ($message) use ($telegram) {
+            $bot->command('enable', function ($message) use ($telegram, $repository) {
                 $chatId = $message->getChat()->getId();
 
-                $user = $this->users->findByTelegramId($chatId);
+                $user = $repository->findByTelegramId($chatId);
 
                 if (null === $user) {
                     $telegram->sendMessage($chatId, 'You are not connected to bot.');
@@ -60,10 +47,10 @@ class TelegramController extends Controller
                 }
             });
 
-            $bot->command('disable', function ($message) use ($telegram) {
+            $bot->command('disable', function ($message) use ($telegram, $repository) {
                 $chatId = $message->getChat()->getId();
 
-                $user = $this->users->findByTelegramId($chatId);
+                $user = $repository->findByTelegramId($chatId);
 
                 if (null === $user) {
                     $telegram->sendMessage($chatId, 'You are not connected to bot.');
