@@ -52,12 +52,13 @@ class TelegramSender implements SenderInterface
                             $message = new TextMessage($chatId, $post);
                             $this->bindJob($message);
                         } else {
-                            $photo->caption = $caption;
+                            $photo->caption = strip_tags($caption);
                             $this->bindJob($photo);
                         }
                     }
                 } elseif (get_class($attachment) === Video::class) {
                     $message = new TextMessage($chatId, $post);
+                    $message->disablePreview = false;
                     $message->text .= PHP_EOL . $attachment->video;
                     $this->bindJob($message);
                 } elseif (get_class($attachment) === Document::class) {
