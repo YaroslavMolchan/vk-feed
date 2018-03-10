@@ -2,7 +2,9 @@
 
 namespace App\Dto;
 
+use App\Dto\Attachments\Document;
 use App\Dto\Attachments\Photo;
+use App\Dto\Attachments\Video;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
@@ -58,6 +60,10 @@ class Post
             foreach ($attributes['attachments'] as $attachment) {
                 if ($attachment['type'] == 'photo') {
                     $this->attachments->push(new Photo($attachment['photo']));
+                } elseif ($attachment['type'] == 'video') {
+                    $this->attachments->push(new Video($attachment['video']));
+                } elseif ($attachment['type'] == 'doc') {
+                    $this->attachments->push(new Document($attachment['doc']));
                 }
             }
         }

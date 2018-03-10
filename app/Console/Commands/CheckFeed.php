@@ -65,7 +65,6 @@ class CheckFeed extends Command
                 // За указанный период времени не было записей, просто пропускаем.
                 continue;
             }
-
             $postTime = $this->sender->sendPosts($user->telegram_id, $posts);
 
             $user->updateSeenDate($postTime);

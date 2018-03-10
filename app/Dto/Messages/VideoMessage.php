@@ -19,9 +19,9 @@ class VideoMessage extends Message
     public $caption;
     /**
      * @param Post $post
-     * @return array
+     * @return void
      */
-    protected function generateAttributes(Post $post): array
+    protected function generateAttributes(Post $post): void
     {
         /* @var \App\Dto\Attachments\Video $attachment */
         $attachment = $post->attachments->first();

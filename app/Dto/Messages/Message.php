@@ -36,7 +36,7 @@ abstract class Message
 
     /**
      * @param Post $post
-     * @return array
+     * @return void
      */
-    abstract protected function generateAttributes(Post $post): array;
+    abstract protected function generateAttributes(Post $post): void;
 }

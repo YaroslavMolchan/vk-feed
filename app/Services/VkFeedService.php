@@ -37,7 +37,7 @@ class VkFeedService
      * @return PostsCollection
      * @throws FeedRecordsNotFoundException
      */
-    public function getPosts(?int $startTime, int $count = 100): PostsCollection
+    public function getPosts(?int $startTime, int $count = 1): PostsCollection
     {
         $response = $this->client->api('newsfeed.get', [
             'filters'    => 'post',
@@ -65,7 +65,7 @@ class VkFeedService
     private function transformPosts(PostsCollection $posts, Collection $groups): PostsCollection
     {
         return $posts->filter(function ($post) {
-            return $this->isRecordIsPost($post);
+            return $this->isRecordIsPost($post) && $this->isSourceNotBlocked($post);
         })->map(function ($post) use ($groups) {
             $group = $groups->where('id', abs($post['source_id']))->first();
             return new Post($post, new Group($group));
@@ -79,5 +79,14 @@ class VkFeedService
     private function isRecordIsPost(array $post): bool
     {
         return $post['post_type'] === 'post' && empty($post['copy_history']) && $post['marked_as_ads'] == 0;
+    }
+
+    private function isSourceNotBlocked(array $post)
+    {
+        $list = [
+            34215577
+        ];
+
+        return !\in_array(abs($post['source_id']), $list, true);
     }
 }

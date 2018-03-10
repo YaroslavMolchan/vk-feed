@@ -18,9 +18,9 @@ class TextMessage extends Message
     public $disablePreview = true;
     /**
      * @param Post $post
-     * @return array
+     * @return void
      */
-    protected function generateAttributes(Post $post): array
+    protected function generateAttributes(Post $post): void
     {
         $this->text = $post->group . PHP_EOL . $post->text;
     }

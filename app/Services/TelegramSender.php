@@ -33,9 +33,9 @@ class TelegramSender implements SenderInterface
                 $time = $post->date;
             }
             // Проверяем стоит ли нам вообще отправлять эту запись.
-            if ((new VkPostChecker())->passes($post) === false) {
-                continue;
-            }
+//            if ((new VkPostChecker())->passes($post) === false) {
+//                continue;
+//            }
 
 
             if ($post->attachments->count() === 0) {
@@ -77,7 +77,7 @@ class TelegramSender implements SenderInterface
      */
     protected function bindJob(Message $message) {
         // Задержка перед отправкой минимальная, если её не указывать все задачи пойдут паралельно и будет каша.
-        $job = (new SendTelegramMessage($message))->delay(Carbon::now()->addSecond());
+        $job = new SendTelegramMessage($message);
         dispatch($job);
     }
 }

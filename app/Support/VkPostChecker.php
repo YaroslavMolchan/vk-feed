@@ -17,7 +17,7 @@ class VkPostChecker implements PostCheckerInterface
      */
     public function passes(Post $post): bool
     {
-        return ! $this->isGroupBlocked($post->group);
+        return true;
     }
 
     /**
