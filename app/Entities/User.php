@@ -29,7 +29,7 @@ class User extends Model
     public function updateSeenDate(int $postTime): bool
     {
         return $this->update([
-            'last_date' => $postTime
+            'last_date' => ++$postTime
         ]);
     }
 
