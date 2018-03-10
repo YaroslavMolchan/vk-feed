@@ -49,15 +49,7 @@ class TelegramController extends Controller
             $bot->command('enable', function ($message) use ($telegram) {
                 $chatId = $message->getChat()->getId();
 
-                $user = $this->users->findByTelegramId($chatId);
-
-                if (null === $user) {
-                    $telegram->sendMessage($chatId, 'You are not connected to bot.');
-                } else {
-                    $user->enable();
-
-                    $telegram->sendMessage($chatId, 'News Feed enabled, to disable type: /disable');
-                }
+                $telegram->sendMessage($chatId, 'News Feed enabled, to disable type: /disable');
             });
 
             $bot->command('disable', function ($message) use ($telegram) {
