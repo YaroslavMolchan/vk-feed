@@ -63,6 +63,9 @@ class TelegramSender implements SenderInterface
                     $message->text .= PHP_EOL . $attachment->video;
                     $this->bindJob($message);
                 } elseif (get_class($attachment) === Document::class) {
+                    if (empty($attachment->document)) {
+                        continue;
+                    }
                     $message = new DocumentMessage($chatId, $post);
                     if (!empty($post->text)) {
                        $message->caption = $post->text;
