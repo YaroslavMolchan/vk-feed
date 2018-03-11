@@ -31,9 +31,9 @@ class User extends Model
         if ($postTime < 1) {
             return false;
         }
-        
+
         return $this->update([
-            'last_date' => $postTime
+            'last_date' => ++$postTime
         ]);
     }
 
