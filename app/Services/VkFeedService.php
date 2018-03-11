@@ -78,7 +78,10 @@ class VkFeedService
      */
     private function isRecordIsPost(array $post): bool
     {
-        return $post['post_type'] === 'post' && empty($post['copy_history']) && $post['marked_as_ads'] == 0;
+        return array_key_exists('post_type', $post) === true
+            && $post['post_type'] === 'post' 
+            && empty($post['copy_history']) 
+            && $post['marked_as_ads'] == 0;
     }
 
     private function isSourceNotBlocked(array $post)
