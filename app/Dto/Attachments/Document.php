@@ -17,7 +17,7 @@ class Document {
      * @param array $attributes
      */
     public function __construct(array $attributes) {
-        if (!array_key_exists('preview', $attributes)) {
+        if (array_key_exists('preview', $attributes)) {
             $this->document = $attributes['preview']['video']['src'];
         }
         $this->caption = $attributes['title'];
