@@ -35,7 +35,7 @@ class SendTelegramMessage extends Job
     {
         $bot = new BotApi(env('TELEGRAM_BOT_API'));
 
-//        try {
+       try {
             if (get_class($this->message) === TextMessage::class) {
                 $bot->sendMessage(
                     $this->message->id,
@@ -56,8 +56,8 @@ class SendTelegramMessage extends Job
                     $this->message->caption
                 );
             }
-//        } catch (Exception $exception) {
+       } catch (Exception $exception) {
             // Что-то пошло не так, но пользователю не обязательно об этом знать, это всего лишь пост со стены.
-//        }
+       }
     }
 }

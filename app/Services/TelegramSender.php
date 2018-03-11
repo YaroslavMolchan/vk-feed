@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\SenderInterface;
 use App\Dto\Attachments\Document;
 use App\Dto\Attachments\Photo;
+use App\Dto\Attachments\Link;
 use App\Dto\Attachments\Video;
 use App\Dto\Messages\DocumentMessage;
 use App\Dto\Messages\Message;
@@ -63,7 +64,15 @@ class TelegramSender implements SenderInterface
                     $this->bindJob($message);
                 } elseif (get_class($attachment) === Document::class) {
                     $message = new DocumentMessage($chatId, $post);
+                    if (!empty($post->text)) {
+                       $message->caption = $post->text;
+                    }
                     $message->caption = strip_tags($post->group) . ':'. $message->caption;
+                    $this->bindJob($message);
+                } elseif (get_class($attachment) === Link::class) {
+                    $message = new TextMessage($chatId, $post);
+                    $message->disablePreview = false;
+                    $message->text .= PHP_EOL . $attachment->url;
                     $this->bindJob($message);
                 }
             }

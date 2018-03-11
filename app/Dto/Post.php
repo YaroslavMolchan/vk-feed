@@ -5,6 +5,7 @@ namespace App\Dto;
 use App\Dto\Attachments\Document;
 use App\Dto\Attachments\Photo;
 use App\Dto\Attachments\Video;
+use App\Dto\Attachments\Link;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
@@ -64,6 +65,8 @@ class Post
                     $this->attachments->push(new Video($attachment['video']));
                 } elseif ($attachment['type'] == 'doc') {
                     $this->attachments->push(new Document($attachment['doc']));
+                } elseif ($attachment['type'] == 'link') {
+                    $this->attachments->push(new Link($attachment['link']));
                 }
             }
         }
