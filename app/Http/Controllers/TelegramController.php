@@ -30,7 +30,7 @@ class TelegramController extends Controller
             $bot->command('start', function ($message) use ($telegram) {
                 $chatId = $message->getChat()->getId();
 
-                $telegram->sendMessage($chatId, route('telegram-redirect', $chatId));
+                $telegram->sendMessage($chatId, route('telegram-redirect', ['id' => $chatId]));
             });
 
             $bot->command('enable', function ($message) use ($telegram, $repository) {
