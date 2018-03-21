@@ -51,8 +51,11 @@ class RegisterController extends Controller
             ], 500);
         }
 
+        preg_match('/\#code=(.*)/', $request->input('code'), $matches);
+        $code = $matches[1] ?? $request->input('code');
+
         try {
-            $response = $vk->getAccessToken($request->input('code'));
+            $response = $vk->getAccessToken($code);
         } catch (VKException $e) {
             return response()->json([
                 'message' => 'Код уже не актуален, получите новый.'

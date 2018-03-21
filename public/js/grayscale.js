@@ -57,8 +57,19 @@
             dataType: 'json',
             processData: false,
             contentType: false
-        }).done(function (data) {
-            console.log('Notifications cleared', data);
+        }).done(function (response) {
+            if (response.ok === true) {
+                swal({
+                    title: 'Поздравляем',
+                    html: response.message
+                })
+            } else {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    html: response.message
+                })
+            }
         }).fail(function (response) {
             if (response.status === 422) {
                 var errorsList = '';
