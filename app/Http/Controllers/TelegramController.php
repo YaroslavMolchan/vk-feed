@@ -64,7 +64,7 @@ class TelegramController extends Controller
             // Стандартный ответ для бота.
             $bot->on(function($update) use ($telegram){
                 $callback = $update->getCallbackQuery();
-                $telegram->getSender()->answerCallbackQuery($callback->getId());
+                $telegram->answerCallbackQuery($callback->getId());
             }, function($update){
                 return true;
             });
