@@ -35,9 +35,10 @@ class RegisterController extends Controller
     public function handle(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'telegram_id' => 'required|exists:users,telegram_id',
+            'telegram_id' => 'required|unique:users,telegram_id',
             'code'        => 'required'
         ], [
+            'telegram_id.unique' => 'Вы уже подключены к Telegram боту.',
             'telegram_id.required' => 'Сначала получите ссылку у Telegram бота.',
             'code.required' => 'Укажите URL который вам выдал VK.',
         ]);
