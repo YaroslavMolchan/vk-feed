@@ -89,6 +89,9 @@
             <p>2. <a href="{!! route('login') !!}" target="_blank">Разрешите</a> боту просматривать вашу стену VK.</p>
             <p>3. Скопируйте URL на который вы были перенаправлены после разрешения и вставьте его <a class="form-toggler" href="#">сюда</a>.
                 <div class="code-form">
+                    @if(empty($telegramId) || !ctype_digit($telegramId))
+                        <p class="text-warning" style="margin-bottom: 5px;">Мы не знаем ваш Telegram ID. Перейдите по ссылке, которую вам дал бот.</p>
+                    @endif
                     <form action="{!! route('register') !!}">
                         <input type="input" class="input" name="code" />
                         <input type="hidden" name="telegram_id" value="{!! $telegramId !!}" />

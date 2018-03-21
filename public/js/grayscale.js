@@ -70,6 +70,12 @@
                     title: 'Oops...',
                     html: errorsList
                 })
+            } else if (response.status === 420 || response.status === 500) {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    html: response.responseJSON.message
+                })
             }
             console.log('Error - can`t clear notifications!', response);
         });
