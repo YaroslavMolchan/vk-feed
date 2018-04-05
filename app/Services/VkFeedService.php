@@ -81,7 +81,7 @@ class VkFeedService
         return array_key_exists('post_type', $post) === true
             && $post['post_type'] === 'post' 
             && empty($post['copy_history']) 
-            && $post['marked_as_ads'] == 0;
+            && (isset($post['marked_as_ads']) && $post['marked_as_ads'] == 0);
     }
 
     private function isSourceNotBlocked(array $post)
