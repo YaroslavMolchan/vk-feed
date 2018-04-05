@@ -90,8 +90,8 @@ class TelegramSender implements SenderInterface
      */
     protected function bindJob(Message $message) {
         // Задержка перед отправкой минимальная, если её не указывать все задачи пойдут паралельно и будет каша.
-//        $job = (new SendTelegramMessage($message))->delay(Carbon::now()->addSecond());
-//        dispatch($job);
-        SendTelegramMessage::dispatch($message)->delay(Carbon::now()->addSecond());
+        $job = (new SendTelegramMessage($message))->delay(Carbon::now()->addSecond());
+        dispatch($job);
+//        SendTelegramMessage::dispatch($message)->delay(Carbon::now()->addSecond());
     }
 }
