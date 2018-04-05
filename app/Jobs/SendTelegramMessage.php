@@ -6,11 +6,16 @@ use App\Dto\Messages\DocumentMessage;
 use App\Dto\Messages\Message;
 use App\Dto\Messages\PhotoMessage;
 use App\Dto\Messages\TextMessage;
+use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Exception;
 
 class SendTelegramMessage extends Job
 {
+    use Dispatchable, InteractsWithQueue, Queueable;
+
     /**
      * @var Message
      */

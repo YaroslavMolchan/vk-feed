@@ -1,6 +1,5 @@
 /vendor
 /.idea
-composer.lock
 /database/database.sqlite
 Homestead.json
 Homestead.yaml

@@ -6,7 +6,6 @@ use App\Dto\Attachments\Document;
 use App\Dto\Attachments\Photo;
 use App\Dto\Attachments\Video;
 use App\Dto\Attachments\Link;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class Post

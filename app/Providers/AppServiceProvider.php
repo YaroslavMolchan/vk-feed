@@ -21,8 +21,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         else {
-            $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
-            $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+            $this->app->alias('bugsnag.logger', \Psr\Log\LoggerIqnterface::class);
         }
         $this->app->register(\Prettus\Repository\Providers\LumenRepositoryServiceProvider::class);
 
