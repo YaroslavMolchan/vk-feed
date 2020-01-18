@@ -73,7 +73,7 @@
         }).fail(function (response) {
             if (response.status === 422) {
                 var errorsList = '';
-                $.each(response.responseJSON, function (field, message) {
+                $.each(response.responseJSON.errors, function (field, message) {
                     errorsList += message + '<br>'
                 });
                 swal({

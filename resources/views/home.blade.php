@@ -5,10 +5,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="description" content="Получайте новостную ленту Вконтакте в ваш Telegram. Telegram бот получает только актуальные посты из вашей ленты VK.">
 
-    <title>VK Feed mBot</title>
+    <title>VK Feed mBot - просто способ просмотра вашей ленты VK в Telegram</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -133,7 +133,7 @@
 <!-- Footer -->
 <footer>
     <div class="container text-center">
-        <p>Copyright &copy; Jadson {!! date('Y') !!}</p>
+        <p>Copyright &copy; <a href="https://molchan.me">MY</a> {!! date('Y') !!}</p>
     </div>
 </footer>
 
